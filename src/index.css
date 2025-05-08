@@ -118,3 +118,28 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* workspace scrollbar */
+.scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #a3a3a3;
+
+  border-radius: 6px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: #fff;
+  padding: 6px;
+}
+
+/* Dark Mode Scrollbar */
+.dark .scrollbar::-webkit-scrollbar-thumb {
+  background-color: #52525c;
+}
+
+.dark .scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
