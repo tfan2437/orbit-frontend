@@ -3,12 +3,15 @@ import { twMerge } from "tailwind-merge";
 const RoundButton = ({
   children,
   activated = false,
+  onClick = () => {},
 }: {
   children: React.ReactNode;
   activated?: boolean;
+  onClick?: () => void;
 }) => {
   return (
     <button
+      onClick={onClick}
       className={twMerge(
         "rounded-full size-9 flex items-center justify-center border  cursor-pointer",
         activated

@@ -1,15 +1,15 @@
-type TextPart = {
+export type TextPart = {
   text: string;
 };
 
-type FilePart = {
-  fileData: {
-    fileUri: string;
+export type DataPart = {
+  inlineData: {
+    data: string;
     mimeType: string;
   };
 };
 
-type Part = TextPart | FilePart;
+export type Part = TextPart | DataPart;
 
 export type Content = {
   role: "user" | "model";

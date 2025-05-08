@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import type { Content } from "@/types";
+import type { Part } from "@/types";
 const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
 type TextResponse =
@@ -13,23 +14,19 @@ type TextResponse =
     };
 
 export const generateTextResponse = async (
-  prompt: string,
-  chatHistory: Content[] = []
+  parts: Part[],
+  messages: Content[] = []
 ): Promise<TextResponse> => {
   const textConfig = { responseMimeType: "text/plain" };
   const textModel = "gemini-2.0-flash";
 
   // Start with the chat history
-  const contents: Content[] = [...chatHistory];
+  const contents: Content[] = [...messages];
 
   // Add the current user prompt
   contents.push({
     role: "user",
-    parts: [
-      {
-        text: prompt,
-      },
-    ],
+    parts,
   });
 
   try {
