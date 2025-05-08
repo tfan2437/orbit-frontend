@@ -17,7 +17,7 @@ const Home = () => {
   const [prompt, setPrompt] = useState("");
   const [files, setFiles] = useState<FileModel[]>([]);
   const [messages, setMessages] = useState<Content[]>([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const handleGenerateText = async () => {
@@ -27,6 +27,7 @@ const Home = () => {
 
     setPrompt("");
     setFiles([]);
+    setIsLoading(true);
 
     const parts: Part[] = [
       {
@@ -54,6 +55,8 @@ const Home = () => {
         { role: "model", parts: [{ text: res }] },
       ]);
     }
+
+    setIsLoading(false);
   };
 
   const fileInput = useRef<HTMLInputElement>(null);
@@ -167,6 +170,7 @@ const Home = () => {
           )
         )}
         {/* div for auto scroll to bottom */}
+        {isLoading && <div className="loader" />}
         <div ref={messagesEndRef} />
       </div>
       <div className="flex w-full flex-col items-center border-zinc-600 bg-zinc-900 rounded-3xl border p-3">
