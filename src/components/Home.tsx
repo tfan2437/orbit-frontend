@@ -3,7 +3,7 @@
 import { generateTextResponse } from "@/services/gemini";
 import type { Content, Part, DataPart } from "@/types";
 import { useEffect, useState, useRef } from "react";
-import { ArrowUpIcon, GlobeIcon, PlusIcon } from "lucide-react";
+import { ArrowUpIcon, GlobeIcon, PlusIcon, XIcon } from "lucide-react";
 import RoundButton from "./button/RoundButton";
 
 interface FileModel {
@@ -21,6 +21,7 @@ const Home = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const handleGenerateText = async () => {
+    if (prompt === "") return;
     const submitPrompt = prompt;
     const submitFiles = files;
 
@@ -113,6 +114,10 @@ const Home = () => {
     }
   };
 
+  const removeFile = (file: FileModel) => {
+    setFiles(files.filter((f) => f.name !== file.name));
+  };
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -165,10 +170,32 @@ const Home = () => {
         <div ref={messagesEndRef} />
       </div>
       <div className="flex w-full flex-col items-center border-zinc-600 bg-zinc-900 rounded-3xl border p-3">
+        {files.length > 0 && (
+          <div className="w-full flex items-center gap-2 mb-3">
+            {files.map((file, index) => (
+              <div
+                key={index}
+                className="aspect-square h-14 rounded-lg relative"
+              >
+                <button
+                  className="absolute -top-1.5 -right-1.5 border-3 p-0.5 rounded-full border-zinc-900 bg-white cursor-pointer outline-none"
+                  onClick={() => removeFile(file)}
+                >
+                  <XIcon className="size-3 text-black" strokeWidth={2.5} />
+                </button>
+                <img
+                  src={`data:${file.type};base64,${file.base64}`}
+                  alt="image"
+                  className="h-full object-cover rounded-lg"
+                />
+              </div>
+            ))}
+          </div>
+        )}
         <textarea
-          className="scrollbar max-h-20 w-full resize-none overflow-y-auto border-none p-1 text-base outline-none"
+          className="scrollbar w-full resize-none overflow-y-auto border-none p-1 text-base outline-none"
           placeholder="Ask anything"
-          rows={4}
+          rows={2}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={(e) => {
