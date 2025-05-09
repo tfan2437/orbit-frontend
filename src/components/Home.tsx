@@ -5,6 +5,7 @@ import type { Content, Part, DataPart } from "@/types";
 import { useEffect, useState, useRef } from "react";
 import { ArrowUpIcon, GlobeIcon, PlusIcon, XIcon } from "lucide-react";
 import RoundButton from "./button/RoundButton";
+import Markdown from "react-markdown";
 
 interface FileModel {
   name: string;
@@ -123,6 +124,7 @@ const Home = () => {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    console.log(messages);
   }, [messages]);
 
   useEffect(() => {
@@ -130,101 +132,109 @@ const Home = () => {
   }, [files]);
 
   return (
-    <div className="w-full max-w-xl h-screen flex flex-col items-center py-4 gap-2">
-      <div className="scrollbar w-full flex-1 h-full overflow-y-auto flex flex-col">
-        {messages.map((message, index) =>
-          message.role === "user" &&
-          message.parts[0] &&
-          "text" in message.parts[0] ? (
-            <div key={index} className="flex flex-col w-full pb-8 gap-2">
-              <div className="flex flex-row justify-end gap-1">
-                {message.parts.map(
-                  (part, index) =>
-                    "inlineData" in part && (
-                      <div key={index} className="h-24">
-                        <img
-                          src={`data:${
-                            (part as DataPart).inlineData.mimeType
-                          };base64,${(part as DataPart).inlineData.data}`}
-                          alt="image"
-                          className="h-full rounded-lg"
-                        />
-                      </div>
-                    )
-                )}
-              </div>
-              <div className="flex flex-row justify-end">
-                <div className="border-zinc-700 bg-zinc-900 border w-fit max-w-80 px-4 py-1.5 rounded-lg">
-                  <p>{message.parts[0].text}</p>
+    <div className="w-full h-screen flex flex-col items-center gap-2 relative">
+      <div className="scrollbar w-full flex-1 h-full overflow-y-auto flex flex-col items-center">
+        <div className="w-full max-w-3xl px-4">
+          {/* for navbar padding purpose */}
+          <div className="w-full h-14" />
+          {messages.map((message, index) =>
+            message.role === "user" &&
+            message.parts[0] &&
+            "text" in message.parts[0] ? (
+              <div key={index} className="flex flex-col w-full pb-8 gap-2">
+                <div className="flex flex-row justify-end gap-1">
+                  {message.parts.map(
+                    (part, index) =>
+                      "inlineData" in part && (
+                        <div key={index} className="h-24">
+                          <img
+                            src={`data:${
+                              (part as DataPart).inlineData.mimeType
+                            };base64,${(part as DataPart).inlineData.data}`}
+                            alt="image"
+                            className="h-full rounded-lg"
+                          />
+                        </div>
+                      )
+                  )}
+                </div>
+                <div className="flex flex-row justify-end">
+                  <div className="border-zinc-700 bg-zinc-900 border w-fit max-w-80 px-4 py-1.5 rounded-lg">
+                    <p>{message.parts[0].text}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ) : (
-            <div key={index} className="w-full px-4 pb-8">
-              <p>
-                {message.parts[0] && "text" in message.parts[0]
-                  ? message.parts[0].text
-                  : "[File content]"}
-              </p>
-            </div>
-          )
-        )}
-        {/* div for auto scroll to bottom */}
-        {isLoading && <div className="loader" />}
-        <div ref={messagesEndRef} />
-      </div>
-      <div className="flex w-full flex-col items-center border-zinc-600 bg-zinc-900 rounded-3xl border p-3">
-        {files.length > 0 && (
-          <div className="w-full flex items-center gap-2 mb-3">
-            {files.map((file, index) => (
-              <div
-                key={index}
-                className="aspect-square h-14 rounded-lg relative"
-              >
-                <button
-                  className="absolute -top-1.5 -right-1.5 border-3 p-0.5 rounded-full border-zinc-900 bg-white cursor-pointer outline-none"
-                  onClick={() => removeFile(file)}
-                >
-                  <XIcon className="size-3 text-black" strokeWidth={2.5} />
-                </button>
-                <img
-                  src={`data:${file.type};base64,${file.base64}`}
-                  alt="image"
-                  className="h-full object-cover rounded-lg"
-                />
+            ) : (
+              <div key={index} className="w-full pb-8 chat scrollbar">
+                <Markdown>
+                  {message.parts[0] && "text" in message.parts[0]
+                    ? message.parts[0].text
+                    : "[File content]"}
+                </Markdown>
               </div>
-            ))}
-          </div>
-        )}
-        <textarea
-          className="scrollbar w-full resize-none overflow-y-auto border-none p-1 text-base outline-none"
-          placeholder="Ask anything"
-          rows={2}
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              handleGenerateText();
-            }
-          }}
-        />
-        <div className="flex h-fit w-full flex-row items-center justify-between gap-2">
-          <div className="flex flex-row items-center gap-2">
-            <RoundButton
-              onClick={selectFiles}
-              children={<PlusIcon className="size-6" />}
-            />
-            <RoundButton children={<GlobeIcon className="size-4" />} />
-          </div>
-          <button
-            className="rounded-full size-9 flex items-center justify-center cursor-pointer bg-white text-black hover:bg-zinc-200"
-            onClick={handleGenerateText}
-          >
-            <ArrowUpIcon className="size-5" />
-          </button>
+            )
+          )}
+          {/* div for auto scroll to bottom */}
+          {isLoading && <div className="loader" />}
+          <div ref={messagesEndRef} className="w-full h-36 bg-transparent" />
         </div>
       </div>
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-3xl px-3 bg-background flex-col items-center">
+        <div className="w-full flex-col items-center border-zinc-600 bg-zinc-900 rounded-3xl border p-3">
+          {files.length > 0 && (
+            <div className="w-full flex items-center gap-2 mb-3">
+              {files.map((file, index) => (
+                <div
+                  key={index}
+                  className="aspect-square h-14 rounded-lg relative"
+                >
+                  <button
+                    className="absolute -top-1.5 -right-1.5 border-3 p-0.5 rounded-full border-zinc-900 bg-white cursor-pointer outline-none"
+                    onClick={() => removeFile(file)}
+                  >
+                    <XIcon className="size-3 text-black" strokeWidth={2.5} />
+                  </button>
+                  <img
+                    src={`data:${file.type};base64,${file.base64}`}
+                    alt="image"
+                    className="h-full object-cover rounded-lg"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+          <textarea
+            className="scrollbar w-full resize-none overflow-y-auto border-none p-1 text-base outline-none"
+            placeholder="Ask anything"
+            rows={2}
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleGenerateText();
+              }
+            }}
+          />
+          <div className="flex h-fit w-full flex-row items-center justify-between gap-2">
+            <div className="flex flex-row items-center gap-2">
+              <RoundButton
+                onClick={selectFiles}
+                children={<PlusIcon className="size-6" />}
+              />
+              <RoundButton children={<GlobeIcon className="size-4" />} />
+            </div>
+            <button
+              className="rounded-full size-9 flex items-center justify-center cursor-pointer bg-white text-black hover:bg-zinc-200"
+              onClick={handleGenerateText}
+            >
+              <ArrowUpIcon className="size-5" />
+            </button>
+          </div>
+        </div>
+        <div className="w-full h-3" />
+      </div>
+
       <input
         ref={fileInput}
         type="file"
