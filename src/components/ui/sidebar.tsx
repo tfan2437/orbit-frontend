@@ -277,6 +277,29 @@ function SidebarTrigger({
   );
 }
 
+function SidebarTriggerCustom({
+  className,
+  onClick,
+}: React.ComponentProps<typeof Button>) {
+  const { toggleSidebar } = useSidebar();
+
+  return (
+    <Button
+      data-sidebar="trigger"
+      data-slot="sidebar-trigger"
+      variant="link"
+      className={cn("size-10 hover:bg-zinc-800 cursor-pointer p-0", className)}
+      onClick={(event) => {
+        onClick?.(event);
+        toggleSidebar();
+      }}
+    >
+      <PanelLeftIcon className="size-6" />
+      <span className="sr-only">Toggle Sidebar</span>
+    </Button>
+  );
+}
+
 function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
   const { toggleSidebar } = useSidebar();
 
@@ -721,4 +744,5 @@ export {
   SidebarSeparator,
   SidebarTrigger,
   useSidebar,
+  SidebarTriggerCustom,
 };
