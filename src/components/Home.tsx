@@ -7,6 +7,9 @@ import { ArrowUpIcon, GlobeIcon, PlusIcon, XIcon } from "lucide-react";
 import RoundButton from "./button/RoundButton";
 import Markdown from "react-markdown";
 
+import { motion } from "framer-motion";
+import { axiosInstance } from "@/lib/axios";
+
 interface FileModel {
   name: string;
   ext: string;
@@ -20,6 +23,15 @@ const Home = () => {
   const [messages, setMessages] = useState<Content[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const fetchTest = async () => {
+    try {
+      const response = await axiosInstance.get("/tests");
+      console.log("Test API response:", response.data);
+    } catch (error) {
+      console.error("Error fetching test data:", error);
+    }
+  };
 
   const handleGenerateText = async () => {
     if (prompt === "") return;
@@ -128,13 +140,19 @@ const Home = () => {
   }, [messages]);
 
   useEffect(() => {
-    console.log(files);
+    if (files.length > 0) {
+      fetchTest();
+    }
   }, [files]);
+
+  useEffect(() => {
+    fetchTest();
+  }, []);
 
   return (
     <div className="w-full h-screen flex flex-col items-center gap-2 relative">
       <div className="scrollbar w-full flex-1 h-full overflow-y-auto flex flex-col items-center">
-        <div className="w-full max-w-3xl px-4">
+        <div className="w-full max-w-3xl px-4 pb-32">
           {/* for navbar padding purpose */}
           <div className="w-full h-14" />
           {messages.map((message, index) =>
@@ -164,6 +182,48 @@ const Home = () => {
                   </div>
                 </div>
               </div>
+            ) : message.role === "model" &&
+              message.parts[0] &&
+              index === messages.length - 1 ? (
+              <motion.div
+                key={index}
+                className="relative w-full pb-8 chat scrollbar"
+                initial={{ clipPath: "inset(0% 0% 100% 0%)" }}
+                animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
+                transition={{
+                  duration: 1.2,
+                  ease: [0.25, 1, 0.5, 1],
+                }}
+              >
+                <motion.div
+                  className="relative z-10"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{
+                    duration: 1.5,
+                    ease: "easeOut",
+                    staggerChildren: 0.05,
+                    delayChildren: 0.1,
+                  }}
+                >
+                  <Markdown>
+                    {message.parts[0] && "text" in message.parts[0]
+                      ? message.parts[0].text
+                      : "[File content]"}
+                  </Markdown>
+                </motion.div>
+
+                {/* Gradient overlay that follows the clip animation */}
+                <motion.div
+                  className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-background"
+                  initial={{ opacity: 1 }}
+                  animate={{ opacity: 0 }}
+                  transition={{
+                    duration: 3,
+                    ease: "easeOut",
+                  }}
+                />
+              </motion.div>
             ) : (
               <div key={index} className="w-full pb-8 chat scrollbar">
                 <Markdown>
@@ -174,6 +234,7 @@ const Home = () => {
               </div>
             )
           )}
+
           {/* div for auto scroll to bottom */}
           {isLoading && <div className="loader" />}
           <div ref={messagesEndRef} className="w-full h-36 bg-transparent" />
