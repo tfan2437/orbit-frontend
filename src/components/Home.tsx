@@ -1,21 +1,17 @@
 // import { ScrollArea } from "@/components/ui/scroll-area";
 // import { logout } from "@/services/firebase";
-import { generateTextResponse } from "@/services/gemini";
-import type { Content, Part, DataPart } from "@/types";
+import type { Content, DataPart } from "@/types";
 import { useEffect, useState, useRef } from "react";
 import { ArrowUpIcon, GlobeIcon, PlusIcon, XIcon } from "lucide-react";
 import RoundButton from "./button/RoundButton";
 import Markdown from "react-markdown";
-
 import { motion } from "framer-motion";
-import { axiosInstance } from "@/lib/axios";
-
-interface FileModel {
-  name: string;
-  ext: string;
-  type: string;
-  base64: string;
-}
+import type { FileModel } from "@/utils/fileUtils";
+import { formatFiles } from "@/utils/fileUtils";
+import {
+  handleTextGeneration,
+  handleImageGeneration,
+} from "@/utils/messageUtils";
 
 const Home = () => {
   const [prompt, setPrompt] = useState("");
@@ -23,15 +19,7 @@ const Home = () => {
   const [messages, setMessages] = useState<Content[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const fetchTest = async () => {
-    try {
-      const response = await axiosInstance.get("/tests");
-      console.log("Test API response:", response.data);
-    } catch (error) {
-      console.error("Error fetching test data:", error);
-    }
-  };
+  const fileInput = useRef<HTMLInputElement>(null);
 
   const handleGenerateText = async () => {
     if (prompt === "") return;
@@ -42,78 +30,33 @@ const Home = () => {
     setFiles([]);
     setIsLoading(true);
 
-    const parts: Part[] = [
-      {
-        text: submitPrompt,
-      },
-      ...submitFiles.map((file) => ({
-        inlineData: {
-          data: file.base64,
-          mimeType: file.type,
-        },
-      })),
-    ];
+    const response = await handleTextGeneration(
+      submitPrompt,
+      submitFiles,
+      messages
+    );
 
-    console.log("SUBMIT PARTS: ", parts);
-
-    setMessages((prev) => [...prev, { role: "user", parts }]);
-
-    const { res, err } = await generateTextResponse(parts, messages);
-
-    if (err || !res) {
-      console.error("ERROR: ", err);
-    } else {
-      setMessages((prev) => [
-        ...prev,
-        { role: "model", parts: [{ text: res }] },
-      ]);
-    }
-
+    setMessages(response);
     setIsLoading(false);
   };
 
-  const fileInput = useRef<HTMLInputElement>(null);
+  const handleGenerateImage = async () => {
+    if (prompt === "") return;
+    const submitPrompt = prompt;
+    const submitFiles = files;
 
-  const formatFiles = async (files: File[]) => {
-    const convertedFiles = await Promise.all(
-      files.map(async (file) => {
-        const { name, ext, type, base64 } = await convertFileToBase64({
-          file,
-        });
+    setPrompt("");
+    setFiles([]);
+    setIsLoading(true);
 
-        return { name, ext, type, base64 };
-      })
+    const response = await handleImageGeneration(
+      submitPrompt,
+      submitFiles,
+      messages
     );
 
-    return convertedFiles;
-  };
-
-  const convertFileToBase64 = async ({
-    file,
-  }: {
-    file: File;
-  }): Promise<{ name: string; ext: string; type: string; base64: string }> => {
-    try {
-      const [name, ext] = file.name.split(".");
-      const type = file.type;
-
-      const arrayBuffer = await file.arrayBuffer();
-      const uint8Array = new Uint8Array(arrayBuffer);
-
-      // Convert to binary string in chunks
-      let binary = "";
-      const CHUNK_SIZE = 8192;
-      for (let i = 0; i < uint8Array.length; i += CHUNK_SIZE) {
-        const chunk = uint8Array.subarray(i, i + CHUNK_SIZE);
-        binary += String.fromCharCode.apply(null, Array.from(chunk));
-      }
-
-      const base64 = btoa(binary);
-      return { name, ext, type, base64 };
-    } catch (error) {
-      console.error("Error converting file to base64:", error);
-      throw new Error("Failed to convert file to base64");
-    }
+    setMessages(response);
+    setIsLoading(false);
   };
 
   const handleFilesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,18 +79,7 @@ const Home = () => {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    console.log(messages);
   }, [messages]);
-
-  useEffect(() => {
-    if (files.length > 0) {
-      fetchTest();
-    }
-  }, [files]);
-
-  useEffect(() => {
-    fetchTest();
-  }, []);
 
   return (
     <div className="w-full h-screen flex flex-col items-center gap-2 relative">
@@ -196,7 +128,7 @@ const Home = () => {
                 }}
               >
                 <motion.div
-                  className="relative z-10"
+                  className="relative z-10 flex flex-col w-full gap-2"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{
@@ -206,11 +138,23 @@ const Home = () => {
                     delayChildren: 0.1,
                   }}
                 >
-                  <Markdown>
-                    {message.parts[0] && "text" in message.parts[0]
-                      ? message.parts[0].text
-                      : "[File content]"}
-                  </Markdown>
+                  {message.parts[0] && "text" in message.parts[0] && (
+                    <Markdown>{message.parts[0].text}</Markdown>
+                  )}
+                  {message.parts.map(
+                    (part, index) =>
+                      "inlineData" in part && (
+                        <div key={index} className="w-full max-w-md">
+                          <img
+                            src={`data:${
+                              (part as DataPart).inlineData.mimeType
+                            };base64,${(part as DataPart).inlineData.data}`}
+                            alt="image"
+                            className="w-full rounded-lg"
+                          />
+                        </div>
+                      )
+                  )}
                 </motion.div>
 
                 {/* Gradient overlay that follows the clip animation */}
@@ -226,15 +170,26 @@ const Home = () => {
               </motion.div>
             ) : (
               <div key={index} className="w-full pb-8 chat scrollbar">
-                <Markdown>
-                  {message.parts[0] && "text" in message.parts[0]
-                    ? message.parts[0].text
-                    : "[File content]"}
-                </Markdown>
+                {message.parts[0] && "text" in message.parts[0] && (
+                  <Markdown>{message.parts[0].text}</Markdown>
+                )}
+                {message.parts.map(
+                  (part, index) =>
+                    "inlineData" in part && (
+                      <div key={index} className="w-full max-w-md">
+                        <img
+                          src={`data:${
+                            (part as DataPart).inlineData.mimeType
+                          };base64,${(part as DataPart).inlineData.data}`}
+                          alt="image"
+                          className="w-full rounded-lg"
+                        />
+                      </div>
+                    )
+                )}
               </div>
             )
           )}
-
           {/* div for auto scroll to bottom */}
           {isLoading && <div className="loader" />}
           <div ref={messagesEndRef} className="w-full h-36 bg-transparent" />
@@ -272,8 +227,9 @@ const Home = () => {
             onChange={(e) => setPrompt(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
+                if (prompt === "") return;
                 e.preventDefault();
-                handleGenerateText();
+                handleGenerateImage();
               }
             }}
           />
@@ -287,7 +243,8 @@ const Home = () => {
             </div>
             <button
               className="rounded-full size-9 flex items-center justify-center cursor-pointer bg-white text-black hover:bg-zinc-200"
-              onClick={handleGenerateText}
+              onClick={handleGenerateImage}
+              disabled={prompt === ""}
             >
               <ArrowUpIcon className="size-5" />
             </button>

@@ -9,6 +9,11 @@ export type DataPart = {
   };
 };
 
+export type InlineData = {
+  data: string;
+  mimeType: string;
+};
+
 export type Part = TextPart | DataPart;
 
 export type Content = {
