@@ -9,12 +9,16 @@ export type DataPart = {
   };
 };
 
+export type FileUrlPart = {
+  fileUrl: string;
+};
+
 export type InlineData = {
   data: string;
   mimeType: string;
 };
 
-export type Part = TextPart | DataPart;
+export type Part = TextPart | DataPart | FileUrlPart;
 
 export type Content = {
   role: "user" | "model";

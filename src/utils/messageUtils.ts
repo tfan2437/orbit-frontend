@@ -2,6 +2,7 @@ import type { Content, Part } from "@/types";
 import { generateTextResponse, generateImageResponse } from "@/services/gemini";
 import type { FileModel } from "./fileUtils";
 import { generateName } from "./utils";
+import { getChat, updateChat, createChat } from "@/services/chat";
 
 const geminiErrorMessage: Content = {
   role: "model",
@@ -37,14 +38,23 @@ export const createMessageParts = (
   ];
 };
 
-export const handleTextGeneration = async (
+export const createStoreParts = (text: string, urls: string[]): Part[] => {
+  return [
+    {
+      text: text,
+    },
+    ...urls.map((url) => ({ fileUrl: url })),
+  ];
+};
+
+export const getTextResponse = async (
   messages: Content[]
-): Promise<{ success: boolean; message: Content }> => {
+): Promise<{ success: boolean; message: Content; text: string }> => {
   const { success, text, error } = await generateTextResponse(messages);
 
   if (!success) {
     console.error("GEMINI ERROR: ", error);
-    return { success: false, message: geminiErrorMessage };
+    return { success: false, message: geminiErrorMessage, text: "" };
   }
 
   const message: Content = {
@@ -52,12 +62,17 @@ export const handleTextGeneration = async (
     parts: [{ text: text }],
   };
 
-  return { success: true, message: message };
+  return { success: true, message: message, text: text };
 };
 
-export const handleImageGeneration = async (
+export const getImageResponse = async (
   messages: Content[]
-): Promise<{ success: boolean; message: Content; file: FileModel }> => {
+): Promise<{
+  success: boolean;
+  message: Content;
+  text: string;
+  file: FileModel;
+}> => {
   const { success, text, inlineData, error } = await generateImageResponse(
     messages
   );
@@ -67,6 +82,7 @@ export const handleImageGeneration = async (
     return {
       success: false,
       message: geminiErrorMessage,
+      text: "",
       file: defaultFile,
     };
   }
@@ -101,5 +117,49 @@ export const handleImageGeneration = async (
     parts: newParts,
   };
 
-  return { success: true, message: message, file: file };
+  return { success: true, message: message, text: text, file: file };
+};
+
+export const storeChat = async (
+  chat_id: string,
+  uid: string,
+  title: string,
+  contents: Content[]
+): Promise<{ success: boolean; message: string }> => {
+  try {
+    const { success: getSuccess } = await getChat(chat_id);
+
+    if (!getSuccess) {
+      const { success: createSuccess } = await createChat(
+        chat_id,
+        uid,
+        title,
+        contents
+      );
+      return { success: createSuccess, message: "Chat created" };
+    } else {
+      const { success: updateSuccess } = await updateChat(
+        chat_id,
+        uid,
+        title,
+        contents
+      );
+      return { success: updateSuccess, message: "Chat updated" };
+    }
+  } catch (error) {
+    console.log("ERROR: ", error);
+    return { success: false, message: "Error storing chat" };
+  }
+};
+
+export const getChatHistory = async (
+  chat_id: string
+): Promise<{ success: boolean; contents: Content[]; message: string }> => {
+  try {
+    const { success, contents, message } = await getChat(chat_id);
+    return { success, contents, message };
+  } catch (error) {
+    console.log("ERROR: ", error);
+    return { success: false, contents: [], message: "" };
+  }
 };

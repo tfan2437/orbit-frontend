@@ -7,22 +7,25 @@ import { motion } from "framer-motion";
 import type { FileModel } from "@/utils/fileUtils";
 import { formatFiles } from "@/utils/fileUtils";
 import {
-  handleTextGeneration,
-  handleImageGeneration,
+  getTextResponse,
+  getImageResponse,
   createMessageParts,
+  createStoreParts,
+  getChatHistory,
 } from "@/utils/messageUtils";
 import { getUploadedUrls } from "@/utils/fileUtils";
-// We'll use useParams later for chat history
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { storeChat } from "@/utils/messageUtils";
+import MessagesContainer from "@/components/message/MessagesContainer";
 
 const ChatPage = () => {
-  // We'll use the id parameter later for chat history
-  // const { id } = useParams();
+  const { id = "" } = useParams();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInput = useRef<HTMLInputElement>(null);
   const [prompt, setPrompt] = useState("");
   const [files, setFiles] = useState<FileModel[]>([]);
+  const [history, setHistory] = useState<Content[]>([]);
   const [messages, setMessages] = useState<Content[]>([]);
   const [isResponding, setIsResponding] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false); // include the ai api response, aws s3 upload, and save message to db
@@ -39,23 +42,45 @@ const ChatPage = () => {
     setPrompt("");
     setFiles([]);
 
-    const { success, message } = await handleTextGeneration(submitMessages);
+    const { success, message, text } = await getTextResponse(submitMessages);
     setMessages([...submitMessages, message]);
     setIsResponding(false);
 
+    let inputUrls: string[] = [];
     if (success && files.length > 0) {
-      const { success, inputUrls, outputUrl, error } = await getUploadedUrls(
-        files
-      );
+      const {
+        success,
+        inputUrls: uploadedInputUrls,
+        error,
+      } = await getUploadedUrls(files);
+      inputUrls = uploadedInputUrls;
       if (!success) console.error("S3 ERROR: ", error);
-      console.log("S3 UPLOADED URLS: ", inputUrls, outputUrl);
+      console.log("S3 UPLOADED URLS: ", inputUrls);
     }
+
+    const { message: storeMessage } = await storeChat(
+      id,
+      "iAJIjDIllqe2pxPl4hHhXJNZEPg2",
+      "test-002",
+      [
+        {
+          role: "user",
+          parts: createStoreParts(prompt, inputUrls),
+        },
+        {
+          role: "model",
+          parts: createStoreParts(text, []),
+        },
+      ]
+    );
+
+    console.log("STORE MESSAGE: ", storeMessage);
 
     setIsProcessing(false);
   };
 
   const handleGenerateImage = async (prompt: string, files: FileModel[]) => {
-    if (prompt === "") return;
+    if (prompt === "" || id === "") return;
     const submitMessages: Content[] = [
       ...messages,
       { role: "user", parts: createMessageParts(prompt, files) },
@@ -67,20 +92,44 @@ const ChatPage = () => {
     setPrompt("");
     setFiles([]);
 
-    const { success, message, file } = await handleImageGeneration(
+    const { success, message, text, file } = await getImageResponse(
       submitMessages
     );
     setMessages([...submitMessages, message]);
     setIsResponding(false);
 
+    let inputUrls: string[] = [];
+    let outputUrl: string[] = [];
     if (success && (files.length > 0 || file.type !== "")) {
-      const { success, inputUrls, outputUrl, error } = await getUploadedUrls(
-        files,
-        file
-      );
+      const {
+        success,
+        inputUrls: uploadedInputUrls,
+        outputUrl: uploadedOutputUrl,
+        error,
+      } = await getUploadedUrls(files, file);
+      inputUrls = uploadedInputUrls;
+      outputUrl = uploadedOutputUrl;
       if (!success) console.error("S3 ERROR: ", error);
       console.log("S3 UPLOADED URLS: ", inputUrls, outputUrl);
     }
+
+    const { message: storeMessage } = await storeChat(
+      id,
+      "iAJIjDIllqe2pxPl4hHhXJNZEPg2",
+      "test-001",
+      [
+        {
+          role: "user",
+          parts: createStoreParts(prompt, inputUrls),
+        },
+        {
+          role: "model",
+          parts: createStoreParts(text, outputUrl),
+        },
+      ]
+    );
+
+    console.log("STORE MESSAGE: ", storeMessage);
 
     setIsProcessing(false);
   };
@@ -107,117 +156,24 @@ const ChatPage = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    const fetchHistory = async () => {
+      if (id === "") return;
+      const { contents } = await getChatHistory(id);
+      console.log("CONTENTS: ", contents);
+      setHistory(contents);
+    };
+    fetchHistory();
+  }, [id]);
+
   return (
     <div className="w-full h-screen flex flex-col items-center gap-2 relative">
       <div className="scrollbar w-full flex-1 h-full overflow-y-auto flex flex-col items-center">
         <div className="w-full max-w-3xl px-4 pb-32">
           {/* for navbar padding purpose */}
           <div className="w-full h-14" />
-          {messages.map((message, index) =>
-            message.role === "user" &&
-            message.parts[0] &&
-            "text" in message.parts[0] ? (
-              <div key={index} className="flex flex-col w-full pb-8 gap-2">
-                <div className="flex flex-row justify-end gap-1">
-                  {message.parts.map(
-                    (part, index) =>
-                      "inlineData" in part && (
-                        <div key={index} className="h-24">
-                          <img
-                            src={`data:${
-                              (part as DataPart).inlineData.mimeType
-                            };base64,${(part as DataPart).inlineData.data}`}
-                            alt="image"
-                            className="h-full rounded-lg"
-                          />
-                        </div>
-                      )
-                  )}
-                </div>
-                <div className="flex flex-row justify-end">
-                  <div className="border-zinc-700 bg-zinc-900 border w-fit max-w-80 px-4 py-1.5 rounded-2xl">
-                    <p>{message.parts[0].text}</p>
-                  </div>
-                </div>
-              </div>
-            ) : message.role === "model" &&
-              message.parts[0] &&
-              index === messages.length - 1 ? (
-              <motion.div
-                key={index}
-                className="relative w-full pb-8 chat scrollbar"
-                initial={{ clipPath: "inset(0% 0% 100% 0%)" }}
-                animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
-                transition={{
-                  duration: 1.2,
-                  ease: [0.25, 1, 0.5, 1],
-                }}
-              >
-                <motion.div
-                  className="relative z-10 flex flex-col w-full gap-2"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{
-                    duration: 1.5,
-                    ease: "easeOut",
-                    staggerChildren: 0.05,
-                    delayChildren: 0.1,
-                  }}
-                >
-                  {message.parts[0] && "text" in message.parts[0] && (
-                    <Markdown>{message.parts[0].text}</Markdown>
-                  )}
-                  {message.parts.map(
-                    (part, index) =>
-                      part &&
-                      "inlineData" in part && (
-                        <div key={index} className="w-full max-w-md">
-                          <img
-                            src={`data:${
-                              (part as DataPart).inlineData.mimeType
-                            };base64,${(part as DataPart).inlineData.data}`}
-                            alt="image"
-                            className="w-full rounded-lg"
-                          />
-                        </div>
-                      )
-                  )}
-                </motion.div>
-
-                {/* Gradient overlay that follows the clip animation */}
-                <motion.div
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-background"
-                  initial={{ opacity: 1 }}
-                  animate={{ opacity: 0 }}
-                  transition={{
-                    duration: 3,
-                    ease: "easeOut",
-                  }}
-                />
-              </motion.div>
-            ) : (
-              <div key={index} className="w-full pb-8 chat scrollbar">
-                {message.parts[0] && "text" in message.parts[0] && (
-                  <Markdown>{message.parts[0].text}</Markdown>
-                )}
-                {message.parts.map(
-                  (part, index) =>
-                    part &&
-                    "inlineData" in part && (
-                      <div key={index} className="w-full max-w-md">
-                        <img
-                          src={`data:${
-                            (part as DataPart).inlineData.mimeType
-                          };base64,${(part as DataPart).inlineData.data}`}
-                          alt="image"
-                          className="w-full rounded-lg"
-                        />
-                      </div>
-                    )
-                )}
-              </div>
-            )
-          )}
+          <MessagesContainer messages={history} isHistory={true} />
+          <MessagesContainer messages={messages} />
           {/* div for auto scroll to bottom */}
           {isResponding && <div className="loader" />}
           <div ref={messagesEndRef} className="w-full h-36 bg-transparent" />

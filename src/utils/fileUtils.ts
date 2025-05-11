@@ -64,7 +64,7 @@ export const getUploadedUrls = async (
 ): Promise<{
   success: boolean;
   inputUrls: string[];
-  outputUrl: string;
+  outputUrl: string[];
   error: string;
 }> => {
   try {
@@ -74,12 +74,14 @@ export const getUploadedUrls = async (
       )
     );
 
-    let outputUrl = "";
+    const outputUrl: string[] = [];
     if (file && file.name !== "") {
-      outputUrl = await uploadToS3(
-        `images/outputs/${file.name}.${file.ext}`,
-        file.uint8Array,
-        file.type
+      outputUrl.push(
+        await uploadToS3(
+          `images/outputs/${file.name}.${file.ext}`,
+          file.uint8Array,
+          file.type
+        )
       );
     }
 
@@ -91,6 +93,6 @@ export const getUploadedUrls = async (
     };
   } catch (error) {
     const err = getErrorMessage(error);
-    return { success: false, inputUrls: [], outputUrl: "", error: err };
+    return { success: false, inputUrls: [], outputUrl: [], error: err };
   }
 };
