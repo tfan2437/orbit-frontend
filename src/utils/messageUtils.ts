@@ -1,6 +1,24 @@
 import type { Content, Part } from "@/types";
 import { generateTextResponse, generateImageResponse } from "@/services/gemini";
 import type { FileModel } from "./fileUtils";
+import { generateName } from "./utils";
+
+const geminiErrorMessage: Content = {
+  role: "model",
+  parts: [
+    {
+      text: "Looks like something went wrong. We're on it. Please try again later.",
+    },
+  ],
+};
+
+const defaultFile: FileModel = {
+  name: "",
+  type: "",
+  base64: "",
+  ext: "",
+  uint8Array: new Uint8Array(),
+};
 
 export const createMessageParts = (
   prompt: string,
@@ -20,75 +38,68 @@ export const createMessageParts = (
 };
 
 export const handleTextGeneration = async (
-  prompt: string,
-  files: FileModel[],
   messages: Content[]
-): Promise<Content[]> => {
-  const parts = createMessageParts(prompt, files);
-  const userMessage: Content = { role: "user", parts };
-  const submitMessages = [...messages, userMessage];
-  const errorMessage: Content = {
-    role: "model",
-    parts: [
-      {
-        text: "Looks like something went wrong. We’re on it. Please try again later.",
-      },
-    ],
-  };
+): Promise<{ success: boolean; message: Content }> => {
+  const { success, text, error } = await generateTextResponse(messages);
 
-  const { res, err } = await generateTextResponse(parts, messages);
-
-  if (err || !res) {
-    console.error("ERROR: ", err);
-    return [...submitMessages, errorMessage];
+  if (!success) {
+    console.error("GEMINI ERROR: ", error);
+    return { success: false, message: geminiErrorMessage };
   }
 
-  const modelMessage: Content = {
+  const message: Content = {
     role: "model",
-    parts: [{ text: res.text }],
+    parts: [{ text: text }],
   };
 
-  return [...submitMessages, modelMessage];
+  return { success: true, message: message };
 };
 
 export const handleImageGeneration = async (
-  prompt: string,
-  files: FileModel[],
   messages: Content[]
-): Promise<Content[]> => {
-  const parts = createMessageParts(prompt, files);
-  const userMessage: Content = { role: "user", parts };
-  const submitMessages = [...messages, userMessage];
-  const errorMessage: Content = {
-    role: "model",
-    parts: [
-      {
-        text: "Looks like something went wrong. We’re on it. Please try again later.",
-      },
-    ],
-  };
+): Promise<{ success: boolean; message: Content; file: FileModel }> => {
+  const { success, text, inlineData, error } = await generateImageResponse(
+    messages
+  );
 
-  const { res, err } = await generateImageResponse(parts, messages);
-
-  if (err || !res) {
-    console.error("ERROR: ", err);
-    return [...submitMessages, errorMessage];
+  if (!success) {
+    console.error("GEMINI ERROR: ", error);
+    return {
+      success: false,
+      message: geminiErrorMessage,
+      file: defaultFile,
+    };
   }
 
   const newParts: Part[] = [];
 
-  if (res.text) {
-    newParts.push({ text: res.text });
+  if (text) {
+    newParts.push({ text: text });
   }
 
-  if (res.inlineData && res.inlineData.data && res.inlineData.mimeType) {
-    newParts.push({ inlineData: res.inlineData });
+  let file: FileModel = defaultFile;
+  if (inlineData && inlineData.data && inlineData.mimeType) {
+    newParts.push({ inlineData: inlineData });
+    file = {
+      name: generateName(),
+      type: inlineData.mimeType || "",
+      base64: "",
+      ext:
+        inlineData.mimeType && inlineData.mimeType.includes("/")
+          ? inlineData.mimeType.split("/")[1]
+          : "",
+      uint8Array: new Uint8Array(
+        atob(inlineData.data)
+          .split("")
+          .map((c) => c.charCodeAt(0))
+      ),
+    };
   }
 
-  const modelMessage: Content = {
+  const message: Content = {
     role: "model",
     parts: newParts,
   };
 
-  return [...submitMessages, modelMessage];
+  return { success: true, message: message, file: file };
 };

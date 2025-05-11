@@ -6,7 +6,9 @@ import ProtectedRoute from "@/routes/ProtectedRoute";
 import HomePage from "@/Pages/HomePage";
 import LoginPage from "@/Pages/LoginPage";
 import DashboardPage from "@/Pages/DashboardPage";
-import UploadPage from "@/Pages/UploadPage";
+import ChatPage from "@/Pages/ChatPage";
+import ChatIDPage from "@/Pages/ChatIDPage";
+
 const App = () => {
   return (
     <>
@@ -14,7 +16,22 @@ const App = () => {
         <Route element={<MainLayout />}>
           <Route path={ROUTES.HOME} element={<HomePage />} />
           <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-          <Route path={ROUTES.UPLOAD} element={<UploadPage />} />
+          <Route
+            path={ROUTES.CHAT}
+            element={
+              <ProtectedRoute>
+                <ChatPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.CHAT_ID}
+            element={
+              <ProtectedRoute>
+                <ChatIDPage />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path={ROUTES.DASHBOARD}
             element={

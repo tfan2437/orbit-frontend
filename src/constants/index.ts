@@ -2,12 +2,14 @@ interface Routes {
   HOME: string;
   LOGIN: string;
   DASHBOARD: string;
-  UPLOAD: string;
+  CHAT: string;
+  CHAT_ID: string;
 }
 
 export const ROUTES: Routes = {
   HOME: "/",
   LOGIN: "/login",
   DASHBOARD: "/dashboard",
-  UPLOAD: "/upload",
+  CHAT: "/chat",
+  CHAT_ID: "/c/:id",
 };

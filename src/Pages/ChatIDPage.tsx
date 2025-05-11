@@ -1,9 +1,7 @@
-// import { ScrollArea } from "@/components/ui/scroll-area";
-// import { logout } from "@/services/firebase";
 import type { Content, DataPart } from "@/types";
 import { useEffect, useState, useRef } from "react";
 import { ArrowUpIcon, GlobeIcon, PlusIcon, XIcon } from "lucide-react";
-import RoundButton from "./button/RoundButton";
+import RoundButton from "@/components/button/RoundButton";
 import Markdown from "react-markdown";
 import { motion } from "framer-motion";
 import type { FileModel } from "@/utils/fileUtils";
@@ -11,52 +9,80 @@ import { formatFiles } from "@/utils/fileUtils";
 import {
   handleTextGeneration,
   handleImageGeneration,
+  createMessageParts,
 } from "@/utils/messageUtils";
+import { getUploadedUrls } from "@/utils/fileUtils";
+// We'll use useParams later for chat history
+// import { useParams } from "react-router-dom";
 
-const Home = () => {
+const ChatPage = () => {
+  // We'll use the id parameter later for chat history
+  // const { id } = useParams();
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInput = useRef<HTMLInputElement>(null);
   const [prompt, setPrompt] = useState("");
   const [files, setFiles] = useState<FileModel[]>([]);
   const [messages, setMessages] = useState<Content[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const fileInput = useRef<HTMLInputElement>(null);
+  const [isResponding, setIsResponding] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false); // include the ai api response, aws s3 upload, and save message to db
 
-  const handleGenerateText = async () => {
+  const handleGenerateText = async (prompt: string, files: FileModel[]) => {
     if (prompt === "") return;
-    const submitPrompt = prompt;
-    const submitFiles = files;
-
+    const submitMessages: Content[] = [
+      ...messages,
+      { role: "user", parts: createMessageParts(prompt, files) },
+    ];
+    setMessages(submitMessages);
+    setIsResponding(true);
+    setIsProcessing(true);
     setPrompt("");
     setFiles([]);
-    setIsLoading(true);
 
-    const response = await handleTextGeneration(
-      submitPrompt,
-      submitFiles,
-      messages
-    );
+    const { success, message } = await handleTextGeneration(submitMessages);
+    setMessages([...submitMessages, message]);
+    setIsResponding(false);
 
-    setMessages(response);
-    setIsLoading(false);
+    if (success && files.length > 0) {
+      const { success, inputUrls, outputUrl, error } = await getUploadedUrls(
+        files
+      );
+      if (!success) console.error("S3 ERROR: ", error);
+      console.log("S3 UPLOADED URLS: ", inputUrls, outputUrl);
+    }
+
+    setIsProcessing(false);
   };
 
-  const handleGenerateImage = async () => {
+  const handleGenerateImage = async (prompt: string, files: FileModel[]) => {
     if (prompt === "") return;
-    const submitPrompt = prompt;
-    const submitFiles = files;
+    const submitMessages: Content[] = [
+      ...messages,
+      { role: "user", parts: createMessageParts(prompt, files) },
+    ];
 
+    setMessages(submitMessages);
+    setIsResponding(true);
+    setIsProcessing(true);
     setPrompt("");
     setFiles([]);
-    setIsLoading(true);
 
-    const response = await handleImageGeneration(
-      submitPrompt,
-      submitFiles,
-      messages
+    const { success, message, file } = await handleImageGeneration(
+      submitMessages
     );
+    setMessages([...submitMessages, message]);
+    setIsResponding(false);
 
-    setMessages(response);
-    setIsLoading(false);
+    if (success && (files.length > 0 || file.type !== "")) {
+      const { success, inputUrls, outputUrl, error } = await getUploadedUrls(
+        files,
+        file
+      );
+      if (!success) console.error("S3 ERROR: ", error);
+      console.log("S3 UPLOADED URLS: ", inputUrls, outputUrl);
+    }
+
+    setIsProcessing(false);
   };
 
   const handleFilesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,7 +135,7 @@ const Home = () => {
                   )}
                 </div>
                 <div className="flex flex-row justify-end">
-                  <div className="border-zinc-700 bg-zinc-900 border w-fit max-w-80 px-4 py-1.5 rounded-lg">
+                  <div className="border-zinc-700 bg-zinc-900 border w-fit max-w-80 px-4 py-1.5 rounded-2xl">
                     <p>{message.parts[0].text}</p>
                   </div>
                 </div>
@@ -143,6 +169,7 @@ const Home = () => {
                   )}
                   {message.parts.map(
                     (part, index) =>
+                      part &&
                       "inlineData" in part && (
                         <div key={index} className="w-full max-w-md">
                           <img
@@ -175,6 +202,7 @@ const Home = () => {
                 )}
                 {message.parts.map(
                   (part, index) =>
+                    part &&
                     "inlineData" in part && (
                       <div key={index} className="w-full max-w-md">
                         <img
@@ -191,7 +219,7 @@ const Home = () => {
             )
           )}
           {/* div for auto scroll to bottom */}
-          {isLoading && <div className="loader" />}
+          {isResponding && <div className="loader" />}
           <div ref={messagesEndRef} className="w-full h-36 bg-transparent" />
         </div>
       </div>
@@ -229,7 +257,7 @@ const Home = () => {
               if (e.key === "Enter") {
                 if (prompt === "") return;
                 e.preventDefault();
-                handleGenerateImage();
+                handleGenerateImage(prompt, files);
               }
             }}
           />
@@ -243,7 +271,7 @@ const Home = () => {
             </div>
             <button
               className="rounded-full size-9 flex items-center justify-center cursor-pointer bg-white text-black hover:bg-zinc-200"
-              onClick={handleGenerateImage}
+              onClick={() => handleGenerateImage(prompt, files)}
               disabled={prompt === ""}
             >
               <ArrowUpIcon className="size-5" />
@@ -264,4 +292,4 @@ const Home = () => {
     </div>
   );
 };
-export default Home;
+export default ChatPage;

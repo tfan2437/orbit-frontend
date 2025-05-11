@@ -1,54 +1,33 @@
 import { GoogleGenAI } from "@google/genai";
 import type { Content, InlineData } from "@/types";
-import type { Part } from "@/types";
 const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
-type TextResponse =
-  | {
-      res: {
-        text: string;
-      };
-      err: null;
-    }
-  | {
-      res: null;
-      err: string;
-    };
+import { getErrorMessage } from "@/utils/utils";
 
-type ImageResponse =
-  | {
-      res: {
-        inlineData: InlineData;
-        text: string;
-      };
-      err: null;
-    }
-  | {
-      res: null;
-      err: string;
-    };
+type TextResponse = {
+  success: boolean;
+  text: string;
+  error: string;
+};
+
+type ImageResponse = {
+  success: boolean;
+  text: string;
+  inlineData: InlineData;
+  error: string;
+};
 
 export const generateTextResponse = async (
-  parts: Part[],
   messages: Content[] = []
 ): Promise<TextResponse> => {
   const textConfig = { responseMimeType: "text/plain" };
   const textModel = "gemini-2.0-flash";
 
-  // Start with the chat history
-  const contents: Content[] = [...messages];
-
-  // Add the current user prompt
-  contents.push({
-    role: "user",
-    parts,
-  });
-
   try {
     const response = await ai.models.generateContentStream({
       model: textModel,
       config: textConfig,
-      contents: contents,
+      contents: messages,
     });
 
     let textResponse = "";
@@ -56,33 +35,34 @@ export const generateTextResponse = async (
       try {
         textResponse += chunk.text ?? "";
       } catch (error) {
-        console.error("Error processing stream chunk:", error);
+        const err = getErrorMessage(error, "Error processing stream chunk.");
         return {
-          res: null,
-          err: "Error processing stream chunk.",
+          success: false,
+          text: "",
+          error: err,
         };
       }
     }
 
     return {
-      res: { text: textResponse },
-      err: null,
+      success: true,
+      text: textResponse,
+      error: "",
     };
-  } catch (error: unknown) {
-    console.error("Error generating text response from Gemini API:", error);
-
-    const errorMessage =
-      "An unknown error occurred while communicating with the Gemini API.";
-
+  } catch (error) {
+    const err = getErrorMessage(
+      error,
+      "Error generating response from Gemini API"
+    );
     return {
-      res: null,
-      err: errorMessage,
+      success: false,
+      text: "",
+      error: err,
     };
   }
 };
 
 export const generateImageResponse = async (
-  parts: Part[],
   messages: Content[] = []
 ): Promise<ImageResponse> => {
   const imageConfig = {
@@ -91,20 +71,11 @@ export const generateImageResponse = async (
   };
   const imageModel = "gemini-2.0-flash-preview-image-generation";
 
-  // Start with the chat history
-  const contents: Content[] = [...messages];
-
-  // Add the current user prompt
-  contents.push({
-    role: "user",
-    parts,
-  });
-
   try {
     const response = await ai.models.generateContentStream({
       model: imageModel,
       config: imageConfig,
-      contents: contents,
+      contents: messages,
     });
 
     const responseData: InlineData[] = [];
@@ -133,24 +104,27 @@ export const generateImageResponse = async (
     console.log("TEXT DATA: ", textData.join(""));
 
     return {
-      res: {
-        inlineData: responseData[0] ?? {
-          data: "",
-          mimeType: "",
-        },
-        text: textData.join(""),
+      success: true,
+      text: textData.join(""),
+      inlineData: responseData[0] ?? {
+        data: "",
+        mimeType: "",
       },
-      err: null,
+      error: "",
     };
-  } catch (error: unknown) {
-    console.error("Error generating text response from Gemini API:", error);
-
-    const errorMessage =
-      "An unknown error occurred while communicating with the Gemini API.";
-
+  } catch (error) {
+    const err = getErrorMessage(
+      error,
+      "Error generating response from Gemini API"
+    );
     return {
-      res: null,
-      err: errorMessage,
+      success: false,
+      text: "",
+      inlineData: {
+        data: "",
+        mimeType: "",
+      },
+      error: err,
     };
   }
 };
