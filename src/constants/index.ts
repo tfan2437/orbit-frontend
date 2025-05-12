@@ -1,10 +1,10 @@
-interface Routes {
+export type Routes = {
   HOME: string;
   LOGIN: string;
   DASHBOARD: string;
   CHAT: string;
   CHAT_ID: string;
-}
+};
 
 export const ROUTES: Routes = {
   HOME: "/",

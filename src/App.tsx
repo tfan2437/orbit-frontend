@@ -13,9 +13,9 @@ const App = () => {
   return (
     <>
       <Routes>
+        <Route path={ROUTES.HOME} element={<HomePage />} />
+        <Route path={ROUTES.LOGIN} element={<LoginPage />} />
         <Route element={<MainLayout />}>
-          <Route path={ROUTES.HOME} element={<HomePage />} />
-          <Route path={ROUTES.LOGIN} element={<LoginPage />} />
           <Route
             path={ROUTES.CHAT}
             element={
