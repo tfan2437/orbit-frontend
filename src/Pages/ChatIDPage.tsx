@@ -169,7 +169,7 @@ const ChatPage = () => {
   return (
     <div className="w-full h-screen flex flex-col items-center gap-2 relative bg-black">
       <div className="scrollbar w-full flex-1 h-full overflow-y-auto flex flex-col items-center">
-        <div className="w-full max-w-3xl px-5 pb-32">
+        <div className="w-full max-w-3xl px-6 pb-32">
           {/* for navbar padding purpose */}
           <div className="w-full h-14" />
           <MessagesContainer messages={history} isHistory={true} />
@@ -238,7 +238,6 @@ const ChatPage = () => {
           <div className="w-full h-4" />
         </div>
       </div>
-
       <input
         ref={fileInput}
         type="file"

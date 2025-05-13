@@ -1,12 +1,49 @@
-import { SidebarTriggerCustom } from "@/components/ui/sidebar";
+import { SidebarTriggerCustom, useSidebar } from "@/components/ui/sidebar";
 
 import UserAvatar from "@/components/UserAvatar";
+import { SquarePenIcon, ChevronDownIcon, ForwardIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const ChatNavbar = () => {
+  const { open } = useSidebar();
   return (
-    <div className="bg-transparent top-0 left-0 w-full h-14 absolute flex items-center justify-between z-50 px-3">
-      <SidebarTriggerCustom />
-      <UserAvatar />
+    <div className="bg-transparent top-0 left-0 w-full h-14 absolute flex items-center justify-between z-50 pl-3 pr-5">
+      <div className="flex items-center">
+        {!open && (
+          <>
+            <SidebarTriggerCustom />
+            <Button
+              variant="link"
+              className="size-10 hover:bg-zinc-800 cursor-pointer p-0"
+              onClick={() => {}}
+            >
+              <SquarePenIcon className="size-[22px]" />
+              <span className="sr-only">Toggle Sidebar</span>
+            </Button>
+          </>
+        )}
+        <button
+          className="h-10 hover:bg-zinc-800 rounded-lg px-3 cursor-pointer p-0 decoration-none flex items-center gap-2"
+          onClick={() => {}}
+        >
+          <span className="text-neutral-100 text-lg font-medium">Orbit</span>
+          <span className="text-neutral-300 text-lg font-light">3</span>
+          <ChevronDownIcon className="size-4 text-neutral-300 ml-1" />
+        </button>
+      </div>
+      <div className="flex items-center gap-3">
+        <button
+          className="h-10 hover:bg-neutral-800 border-neutral-600 border rounded-full px-3 cursor-pointer p-0 decoration-none flex items-center gap-2"
+          onClick={() => {}}
+        >
+          <ForwardIcon
+            className="size-4 transform scale-x-[-1]"
+            strokeWidth={2.5}
+          />
+          <span className="text-neutral-100 text-sm font-medium">Share</span>
+        </button>
+        <UserAvatar />
+      </div>
     </div>
   );
 };
