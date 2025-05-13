@@ -1,8 +1,14 @@
 "use client";
 
+import type { Dispatch, SetStateAction } from "react";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 
-const VanishInput = () => {
+interface VanishInputProps {
+  prompt: string;
+  setPrompt: Dispatch<SetStateAction<string>>;
+}
+
+const VanishInput = ({ prompt, setPrompt }: VanishInputProps) => {
   const placeholders = [
     "What's the first rule of Fight Club?",
     "Who is Tyler Durden?",
@@ -21,9 +27,11 @@ const VanishInput = () => {
 
   return (
     <PlaceholdersAndVanishInput
-      placeholders={placeholders}
+      value={prompt}
+      setValue={setPrompt}
       onChange={handleChange}
       onSubmit={onSubmit}
+      placeholders={placeholders}
     />
   );
 };

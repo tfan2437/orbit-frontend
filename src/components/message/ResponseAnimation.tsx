@@ -31,7 +31,7 @@ const ResponseAnimation = ({ children }: ResponseAnimationProps) => {
 
       {/* Gradient overlay that follows the clip animation */}
       <motion.div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-background"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-black"
         initial={{ opacity: 1 }}
         animate={{ opacity: 0 }}
         transition={{

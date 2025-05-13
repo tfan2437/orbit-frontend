@@ -1,16 +1,27 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import { ArrowUpIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function PlaceholdersAndVanishInput({
-  placeholders,
+  value,
+  setValue,
   onChange,
   onSubmit,
+  placeholders,
 }: {
-  placeholders: string[];
+  value: string;
+  setValue: Dispatch<SetStateAction<string>>;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  placeholders: string[];
 }) {
   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
 
@@ -51,7 +62,6 @@ export function PlaceholdersAndVanishInput({
     }>
   >([]);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [value, setValue] = useState("");
   const [animating, setAnimating] = useState(false);
 
   const draw = useCallback(() => {
