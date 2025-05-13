@@ -24,3 +24,14 @@ export type Content = {
   role: "user" | "model";
   parts: Part[];
 };
+
+export type Chat = {
+  chat_id: string;
+  title: string;
+};
+
+export type Chats = {
+  today: Chat[];
+  yesterday: Chat[];
+  previous: Chat[];
+};

@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/lib/axios";
-import type { Content } from "@/types";
+import type { Chats, Content } from "@/types";
 import { getErrorMessage } from "@/utils/utils";
 
 export const getChat = async (
@@ -30,6 +30,44 @@ export const getChat = async (
       success: false,
       contents: [],
       message: getErrorMessage(error, "Error fetching chat messages"),
+    };
+  }
+};
+
+export const getChats = async (
+  uid: string
+): Promise<{ success: boolean; chats: Chats }> => {
+  try {
+    const response = await axiosInstance.get(`/chats/user/${uid}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status === 200) {
+      return {
+        success: true,
+        chats: response.data.chats,
+      };
+    }
+
+    return {
+      success: false,
+      chats: {
+        today: [],
+        yesterday: [],
+        previous: [],
+      },
+    };
+  } catch (error) {
+    console.log("ERROR: ", error);
+    return {
+      success: false,
+      chats: {
+        today: [],
+        yesterday: [],
+        previous: [],
+      },
     };
   }
 };

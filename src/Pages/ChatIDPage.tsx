@@ -12,6 +12,7 @@ import {
   createMessageParts,
   createStoreParts,
   getChatHistory,
+  getUserChats,
 } from "@/utils/messageUtils";
 import { getUploadedUrls } from "@/utils/fileUtils";
 import { useParams } from "react-router-dom";
@@ -163,6 +164,7 @@ const ChatPage = () => {
       console.log("CONTENTS: ", contents);
       setHistory(contents);
     };
+
     fetchHistory();
   }, [id]);
 

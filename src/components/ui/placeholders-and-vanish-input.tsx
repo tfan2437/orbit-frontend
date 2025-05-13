@@ -13,13 +13,11 @@ import { cn } from "@/lib/utils";
 export function PlaceholdersAndVanishInput({
   value,
   setValue,
-  onChange,
   onSubmit,
   placeholders,
 }: {
   value: string;
   setValue: Dispatch<SetStateAction<string>>;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   placeholders: string[];
 }) {
@@ -169,6 +167,7 @@ export function PlaceholdersAndVanishInput({
     if (e.key === "Enter" && !e.shiftKey && !animating) {
       e.preventDefault();
       vanishAndSubmit();
+      onSubmit && onSubmit(e);
     }
   };
 
@@ -211,7 +210,6 @@ export function PlaceholdersAndVanishInput({
           onChange={(e) => {
             if (!animating) {
               setValue(e.target.value);
-              onChange(e);
             }
           }}
           onKeyDown={handleKeyDown}

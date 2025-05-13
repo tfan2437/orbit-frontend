@@ -1,8 +1,8 @@
-import type { Content, Part } from "@/types";
+import type { Chats, Content, Part } from "@/types";
 import { generateTextResponse, generateImageResponse } from "@/services/gemini";
 import type { FileModel } from "./fileUtils";
 import { generateName } from "./utils";
-import { getChat, updateChat, createChat } from "@/services/chat";
+import { getChat, updateChat, createChat, getChats } from "@/services/chat";
 
 const geminiErrorMessage: Content = {
   role: "model",
@@ -161,5 +161,20 @@ export const getChatHistory = async (
   } catch (error) {
     console.log("ERROR: ", error);
     return { success: false, contents: [], message: "" };
+  }
+};
+
+export const getUserChats = async (
+  uid: string
+): Promise<{ success: boolean; chats: Chats }> => {
+  try {
+    const { success, chats } = await getChats(uid);
+    return { success, chats };
+  } catch (error) {
+    console.log("ERROR: ", error);
+    return {
+      success: false,
+      chats: { today: [], yesterday: [], previous: [] },
+    };
   }
 };
