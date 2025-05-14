@@ -8,6 +8,7 @@ import LoginPage from "@/Pages/LoginPage";
 import DashboardPage from "@/Pages/DashboardPage";
 import ChatPage from "@/Pages/ChatPage";
 import ChatIDPage from "@/Pages/ChatIDPage";
+import TestPage from "./Pages/TestPage";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
       <Routes>
         <Route path={ROUTES.HOME} element={<HomePage />} />
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+        <Route path={"/test"} element={<TestPage />} />
         <Route element={<MainLayout />}>
           <Route
             path={ROUTES.CHAT}
