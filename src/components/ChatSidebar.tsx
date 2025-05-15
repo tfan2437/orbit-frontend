@@ -1,9 +1,4 @@
-import {
-  SquarePenIcon,
-  PanelRightIcon,
-  SearchIcon,
-  CircleFadingArrowUpIcon,
-} from "lucide-react";
+import { SquarePenIcon, PanelRightIcon, SearchIcon } from "lucide-react";
 
 import { Sidebar, SidebarContent, useSidebar } from "@/components/ui/sidebar";
 import { signOut } from "@/services/firebase";
@@ -15,6 +10,10 @@ import { getUserChats } from "@/utils/messageUtils";
 import type { Chats } from "@/types";
 import { useNavigate } from "react-router-dom";
 import { generateId } from "@/utils/utils";
+import ChatsSection from "@/components/chat/ChatsSection";
+import UpgradeButton from "@/components/chat/UpgradeButton";
+import ChatsSkeleton from "@/components/chat/ChatsSkeleton";
+
 const ChatSidebar = () => {
   const navigate = useNavigate();
 
@@ -25,10 +24,6 @@ const ChatSidebar = () => {
     yesterday: [],
     previous: [],
   });
-
-  const redirectToChat = (chat_id: string) => {
-    navigate(`/c/${chat_id}`);
-  };
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -58,7 +53,7 @@ const ChatSidebar = () => {
             />
             <IconButton
               icon={<SquarePenIcon className="size-[22px]" />}
-              onClick={() => {}}
+              onClick={() => navigate(`/c/${generateId()}`)}
               className="hover:bg-neutral-700"
             />
           </div>
@@ -88,56 +83,14 @@ const ChatSidebar = () => {
           />
         </div>
         <div className="flex flex-1 flex-col bg-transparent overflow-y-auto scrollbar px-2 ">
-          {/* today */}
-          {chats.today.length > 0 && (
-            <div className="w-full flex flex-col mt-4">
-              <span className="pl-2 text-xs text-neutral-400 font-light py-1">
-                Today
-              </span>
-              <div className="flex flex-col w-full">
-                {chats.today.map((chat) => (
-                  <SidebarItem
-                    key={chat.chat_id}
-                    title={chat.title}
-                    onClick={() => redirectToChat(chat.chat_id)}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-          {/* yesterday */}
-          {chats.yesterday.length > 0 && (
-            <div className="w-full flex flex-col mt-4">
-              <span className="pl-2 text-xs text-neutral-400 font-light py-1">
-                Yesterday
-              </span>
-              <div className="flex flex-col w-full">
-                {chats.yesterday.map((chat) => (
-                  <SidebarItem
-                    key={chat.chat_id}
-                    title={chat.title}
-                    onClick={() => redirectToChat(chat.chat_id)}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-          {/* previous */}
-          {chats.previous.length > 0 && (
-            <div className="w-full flex flex-col mt-4">
-              <span className="pl-2 text-xs text-neutral-400 font-light py-1">
-                Previous
-              </span>
-              <div className="flex flex-col w-full">
-                {chats.previous.map((chat) => (
-                  <SidebarItem
-                    key={chat.chat_id}
-                    title={chat.title}
-                    onClick={() => redirectToChat(chat.chat_id)}
-                  />
-                ))}
-              </div>
-            </div>
+          {fetching ? (
+            <ChatsSkeleton />
+          ) : (
+            <>
+              <ChatsSection title="Today" chats={chats.today} />
+              <ChatsSection title="Yesterday" chats={chats.yesterday} />
+              <ChatsSection title="Previous" chats={chats.previous} />
+            </>
           )}
         </div>
         <div className="px-2 pt-1">
@@ -148,18 +101,7 @@ const ChatSidebar = () => {
             Sign Out
           </button>
         </div>
-
-        <div className="px-2 pb-2 pt-1">
-          <div className="flex gap-2 w-full items-center hover:bg-neutral-800 px-2 py-2 rounded-lg select-none cursor-pointer">
-            <CircleFadingArrowUpIcon className="size-6" strokeWidth={1.5} />
-            <div className="flex flex-col">
-              <span className="text-sm">Upgrade Plan</span>
-              <span className="text-xs text-neutral-400 font-light">
-                Unlock new features
-              </span>
-            </div>
-          </div>
-        </div>
+        <UpgradeButton />
       </SidebarContent>
     </Sidebar>
   );
