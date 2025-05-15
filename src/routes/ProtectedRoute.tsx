@@ -38,11 +38,11 @@ const ProtectedRoute = ({
     return () => unsubscribe();
   }, [navigate]);
 
-  useEffect(() => {
-    if (userData) {
-      console.log(userData);
-    }
-  }, [userData]);
+  // useEffect(() => {
+  //   if (userData) {
+  //     console.log(userData);
+  //   }
+  // }, [userData]);
 
   if (loading) return <div>Loading...</div>;
 

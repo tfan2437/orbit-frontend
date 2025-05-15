@@ -1,9 +1,7 @@
-import type { Content, DataPart } from "@/types";
+import type { Content } from "@/types";
 import { useEffect, useState, useRef } from "react";
 import { ArrowUpIcon, GlobeIcon, PlusIcon, XIcon } from "lucide-react";
 import RoundButton from "@/components/button/RoundButton";
-import Markdown from "react-markdown";
-import { motion } from "framer-motion";
 import type { FileModel } from "@/utils/fileUtils";
 import { formatFiles } from "@/utils/fileUtils";
 import {
@@ -12,7 +10,6 @@ import {
   createMessageParts,
   createStoreParts,
   getChatHistory,
-  getUserChats,
 } from "@/utils/messageUtils";
 import { getUploadedUrls } from "@/utils/fileUtils";
 import { useParams } from "react-router-dom";
@@ -161,7 +158,6 @@ const ChatPage = () => {
     const fetchHistory = async () => {
       if (id === "") return;
       const { contents } = await getChatHistory(id);
-      console.log("CONTENTS: ", contents);
       setHistory(contents);
     };
 

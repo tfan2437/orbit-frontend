@@ -6,7 +6,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signOut,
+  signOut as firebaseSignOut,
   updateProfile,
 } from "firebase/auth";
 
@@ -119,8 +119,8 @@ const loginWithGoogle = async (): Promise<void> => {
   }
 };
 
-const logout = (): Promise<void> => {
-  return signOut(auth);
+const signOut = (): Promise<void> => {
+  return firebaseSignOut(auth);
 };
 
-export { auth, db, signUp, login, loginWithGoogle, logout };
+export { auth, db, signUp, login, loginWithGoogle, signOut };

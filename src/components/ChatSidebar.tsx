@@ -6,13 +6,13 @@ import {
 } from "lucide-react";
 
 import { Sidebar, SidebarContent, useSidebar } from "@/components/ui/sidebar";
-import { logout } from "@/services/firebase";
+import { signOut } from "@/services/firebase";
 import SparksIcon from "@/components/SparksIcon";
 import IconButton from "@/components/button/IconButton";
 import SidebarItem from "@/components/sidebar/SidebarItem";
 import { useEffect, useState } from "react";
 import { getUserChats } from "@/utils/messageUtils";
-import type { Chat, Chats } from "@/types";
+import type { Chats } from "@/types";
 import { useNavigate } from "react-router-dom";
 import { generateId } from "@/utils/utils";
 const ChatSidebar = () => {
@@ -89,50 +89,64 @@ const ChatSidebar = () => {
         </div>
         <div className="flex flex-1 flex-col bg-transparent overflow-y-auto scrollbar px-2 ">
           {/* today */}
-          <div className="w-full flex flex-col mt-4">
-            <span className="pl-2 text-xs text-neutral-400 font-light py-1">
-              Today
-            </span>
-            <div className="flex flex-col w-full">
-              {chats.today.map((chat) => (
-                <SidebarItem
-                  key={chat.chat_id}
-                  title={chat.title}
-                  onClick={() => redirectToChat(chat.chat_id)}
-                />
-              ))}
+          {chats.today.length > 0 && (
+            <div className="w-full flex flex-col mt-4">
+              <span className="pl-2 text-xs text-neutral-400 font-light py-1">
+                Today
+              </span>
+              <div className="flex flex-col w-full">
+                {chats.today.map((chat) => (
+                  <SidebarItem
+                    key={chat.chat_id}
+                    title={chat.title}
+                    onClick={() => redirectToChat(chat.chat_id)}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
           {/* yesterday */}
-          {/* <div className="w-full flex flex-col mt-4">
-            <span className="pl-2 text-xs text-neutral-400 font-light py-1">
-              Yesterday
-            </span>
-            <div className="flex flex-col w-full">
-              {chats.yesterday.map((chat) => (
-                <SidebarItem
-                  key={chat.chat_id}
-                  title={chat.title}
-                  onClick={() => redirectToChat(chat.chat_id)}
-                />
-              ))}
+          {chats.yesterday.length > 0 && (
+            <div className="w-full flex flex-col mt-4">
+              <span className="pl-2 text-xs text-neutral-400 font-light py-1">
+                Yesterday
+              </span>
+              <div className="flex flex-col w-full">
+                {chats.yesterday.map((chat) => (
+                  <SidebarItem
+                    key={chat.chat_id}
+                    title={chat.title}
+                    onClick={() => redirectToChat(chat.chat_id)}
+                  />
+                ))}
+              </div>
             </div>
-          </div> */}
+          )}
           {/* previous */}
-          <div className="w-full flex flex-col mt-4">
-            <span className="pl-2 text-xs text-neutral-400 font-light py-1">
-              Previous
-            </span>
-            <div className="flex flex-col w-full">
-              {chats.previous.map((chat) => (
-                <SidebarItem
-                  key={chat.chat_id}
-                  title={chat.title}
-                  onClick={() => redirectToChat(chat.chat_id)}
-                />
-              ))}
+          {chats.previous.length > 0 && (
+            <div className="w-full flex flex-col mt-4">
+              <span className="pl-2 text-xs text-neutral-400 font-light py-1">
+                Previous
+              </span>
+              <div className="flex flex-col w-full">
+                {chats.previous.map((chat) => (
+                  <SidebarItem
+                    key={chat.chat_id}
+                    title={chat.title}
+                    onClick={() => redirectToChat(chat.chat_id)}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+        </div>
+        <div className="px-2 pt-1">
+          <button
+            onClick={signOut}
+            className="flex gap-2 font-semibold w-full items-center hover:bg-neutral-800 px-2 py-2 rounded-lg select-none cursor-pointer"
+          >
+            Sign Out
+          </button>
         </div>
 
         <div className="px-2 pb-2 pt-1">

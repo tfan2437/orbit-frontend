@@ -20,9 +20,12 @@ const HomePage = () => {
           <button className="p-3 text-zinc-500 transition-colors duration-200 hover:text-white">
             <SearchIcon className="size-4" />
           </button>
-          <button className="rounded-full bg-zinc-900 px-5 py-3 text-sm font-medium text-white outline-none hover:bg-zinc-800">
+          <Link
+            to="/login"
+            className="rounded-full bg-zinc-900 px-5 py-3 text-sm font-medium text-white outline-none hover:bg-zinc-800"
+          >
             Log in
-          </button>
+          </Link>
         </div>
       </div>
       <div className="h-[76px] w-screen bg-black" />
