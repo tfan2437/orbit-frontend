@@ -5,12 +5,28 @@ import Footer from "@/components/footer/Footer";
 import VanishInput from "@/components/home/VanishInput";
 import { useState } from "react";
 import DefaultPrompts from "@/components/home/defaultPrompts";
+// import { Toaster } from "@/components/ui/sonner";
+// import { toast } from "sonner";
 
 const HomePage = () => {
   const [prompt, setPrompt] = useState<string>("");
 
   return (
     <div className="flex h-screen w-full flex-col bg-black text-white">
+      {/* <Toaster />
+      <button
+        onClick={() =>
+          toast("Launching Soon", {
+            description: "This feature is in the works.",
+            action: {
+              label: "Close",
+              onClick: () => {},
+            },
+          })
+        }
+      >
+        Show Toast
+      </button> */}
       {/* navbar */}
       <div className="fixed left-0 top-0 z-10 flex h-[76px] w-full flex-row justify-between bg-black px-8">
         <div className="flex flex-row items-center gap-2">
@@ -20,6 +36,7 @@ const HomePage = () => {
           <button className="p-3 text-zinc-500 transition-colors duration-200 hover:text-white">
             <SearchIcon className="size-4" />
           </button>
+
           <Link
             to="/login"
             className="rounded-full bg-zinc-900 px-5 py-3 text-sm font-medium text-white outline-none hover:bg-zinc-800"
