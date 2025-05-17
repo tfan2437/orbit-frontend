@@ -12,13 +12,17 @@ import {
   getChatHistory,
 } from "@/utils/messageUtils";
 import { getUploadedUrls } from "@/utils/fileUtils";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { storeChat } from "@/utils/messageUtils";
 import MessagesContainer from "@/components/message/MessagesContainer";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setLoading } from "@/store/slices/chatSlice";
 
 const ChatPage = () => {
   const { id = "" } = useParams();
+  const { pathname } = useLocation();
+
+  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -28,7 +32,6 @@ const ChatPage = () => {
   const [history, setHistory] = useState<Content[]>([]);
   const [messages, setMessages] = useState<Content[]>([]);
   const [isResponding, setIsResponding] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false); // include the ai api response, aws s3 upload, and save message to db
 
   const handleGenerateText = async (prompt: string, files: FileModel[]) => {
     if (prompt === "") return;
@@ -38,9 +41,9 @@ const ChatPage = () => {
     ];
     setMessages(submitMessages);
     setIsResponding(true);
-    setIsProcessing(true);
     setPrompt("");
     setFiles([]);
+    dispatch(setLoading(true));
 
     const { success, message, text } = await getTextResponse(submitMessages);
     setMessages([...submitMessages, message]);
@@ -76,7 +79,7 @@ const ChatPage = () => {
 
     console.log("STORE MESSAGE: ", storeMessage);
 
-    setIsProcessing(false);
+    dispatch(setLoading(false));
   };
 
   const handleGenerateImage = async (prompt: string, files: FileModel[]) => {
@@ -88,9 +91,9 @@ const ChatPage = () => {
 
     setMessages(submitMessages);
     setIsResponding(true);
-    setIsProcessing(true);
     setPrompt("");
     setFiles([]);
+    dispatch(setLoading(true));
 
     const { success, message, text, file } = await getImageResponse(
       submitMessages
@@ -131,7 +134,7 @@ const ChatPage = () => {
 
     console.log("STORE MESSAGE: ", storeMessage);
 
-    setIsProcessing(false);
+    dispatch(setLoading(false));
   };
 
   const handleFilesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -165,6 +168,10 @@ const ChatPage = () => {
 
     fetchHistory();
   }, [id]);
+
+  useEffect(() => {
+    setMessages([]);
+  }, [pathname]);
 
   return (
     <div className="w-full h-screen flex flex-col items-center gap-2 relative bg-black">

@@ -20,6 +20,7 @@ const ChatSidebar = () => {
   const navigate = useNavigate();
 
   const user = useAppSelector((state) => state.user);
+  const { loading } = useAppSelector((state) => state.chat);
 
   const { toggleSidebar } = useSidebar();
   const [fetching, setFetching] = useState(true);
@@ -31,14 +32,14 @@ const ChatSidebar = () => {
 
   useEffect(() => {
     const fetchChats = async () => {
-      if (user.uid !== "") {
+      if (user.uid !== "" && !loading) {
         const { chats } = await getUserChats(user.uid);
         setChats(chats);
       }
       setFetching(false);
     };
     fetchChats();
-  }, [user.uid]);
+  }, [user.uid, loading]);
 
   return (
     <Sidebar>

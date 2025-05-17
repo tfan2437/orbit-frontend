@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { ROUTES } from "@/constants";
 import { handleAuthStateChanged } from "@/services/auth";
 import type { UserData } from "@/services/user";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppDispatch } from "@/store/hooks";
 import { updateUser } from "@/store/slices/userSlice";
 
 interface ProtectedRouteProps {

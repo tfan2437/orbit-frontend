@@ -6,9 +6,13 @@ import { Button } from "@/components/ui/button";
 import { generateId } from "@/utils/utils";
 import { useNavigate } from "react-router-dom";
 import ModelPopover from "@/components/ModelPopover";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 const ChatNavbar = () => {
   const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
+  const { model } = useAppSelector((state) => state.chat);
 
   const { open } = useSidebar();
   const [isCopied, setIsCopied] = useState(false);

@@ -1,6 +1,4 @@
-import { Input } from "@/components/ui/input";
 import { CheckIcon, ChevronDownIcon } from "lucide-react";
-
 import {
   Popover,
   PopoverContent,
@@ -8,13 +6,17 @@ import {
 } from "@/components/ui/popover";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setModel } from "@/store/slices/chatSlice";
 
 const ModelPopover = () => {
-  const [model, setModel] = useState<number>(3);
   const [open, setOpen] = useState(false);
 
+  const dispatch = useAppDispatch();
+  const { model } = useAppSelector((state) => state.chat);
+
   const handleModelChange = (model: number) => {
-    setModel(model);
+    dispatch(setModel(model));
     setOpen(false);
   };
 
