@@ -9,15 +9,13 @@ export type LinksGroup = {
 };
 
 export const NAVLINKS: NavLink[] = [
-  { text: "Research", href: "/" },
-  { text: "Safety", href: "/" },
-  { text: "ChatGPT", href: "/" },
-  { text: "Sora", href: "/" },
-  { text: "API Platform", href: "/" },
-  { text: "For Business", href: "/" },
-  { text: "Stories", href: "/" },
-  { text: "Company", href: "/" },
-  { text: "News", href: "/" },
+  { text: "Research", href: "/login" },
+  { text: "Safety", href: "/login" },
+  { text: "API Platform", href: "/login" },
+  { text: "For Business", href: "/login" },
+  { text: "Stories", href: "/login" },
+  { text: "Company", href: "/login" },
+  { text: "News", href: "/login" },
 ];
 
 export const FOOTER_RESEARCH: LinksGroup = {

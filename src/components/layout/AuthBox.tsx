@@ -4,7 +4,7 @@ import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { signUp, login, loginWithGoogle } from "@/services/firebase";
 
 type InputType = "email" | "password" | "username" | "";
-type Mode = "login" | "signup";
+type Mode = "signin" | "signup";
 type AuthInfo = {
   email: string;
   password: string;
@@ -12,7 +12,7 @@ type AuthInfo = {
 };
 
 const AuthBox = () => {
-  const [mode, setMode] = useState<Mode>("login");
+  const [mode, setMode] = useState<Mode>("signin");
   const [focused, setFocused] = useState<InputType>("");
   const [showPassword, setShowPassword] = useState(false);
   const [authInfo, setAuthInfo] = useState<AuthInfo>({
@@ -152,7 +152,7 @@ const AuthBox = () => {
           type="submit"
           className="w-full px-4 py-2.5 rounded-full bg-black text-white text-sm cursor-pointer"
         >
-          Login
+          {mode === "signin" ? "Log in" : "Sign up"}
         </button>
       </form>
       <div className="flex flex-row items-center justify-center gap-4 w-full px-6">
@@ -167,27 +167,18 @@ const AuthBox = () => {
         <img src="/logo/google.svg" alt="" className="size-5" />
         <span>Continue with Google</span>
       </button>
-      {mode === "login" ? (
-        <p className="text-neutral-400 text-sm font-light">
-          <span className="mr-2">Don't have an account?</span>
-          <span
-            className="text-black cursor-pointer font-medium"
-            onClick={() => handleToggleMode("signup")}
-          >
-            Sign up
-          </span>
-        </p>
-      ) : (
-        <p className="text-neutral-400 text-sm font-light">
-          <span className="mr-2">Already have an account?</span>
-          <span
-            className="text-black cursor-pointer font-medium"
-            onClick={() => handleToggleMode("login")}
-          >
-            Sign in
-          </span>
-        </p>
-      )}
+
+      <p className="text-neutral-400 text-sm font-light">
+        <span className="mr-2">Already have an account?</span>
+        <span
+          className="text-black cursor-pointer font-medium"
+          onClick={() =>
+            handleToggleMode(mode === "signin" ? "signup" : "signin")
+          }
+        >
+          {mode === "signin" ? "Sign up" : "Sign in"}
+        </span>
+      </p>
     </>
   );
 };

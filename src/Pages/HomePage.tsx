@@ -1,75 +1,26 @@
-import { SearchIcon, ChevronRightIcon } from "lucide-react";
-import { Link } from "react-router-dom";
-import { NAVLINKS } from "@/constants/link";
 import Footer from "@/components/footer/Footer";
 import VanishInput from "@/components/home/VanishInput";
 import { useState } from "react";
 import DefaultPrompts from "@/components/home/defaultPrompts";
-// import { Toaster } from "@/components/ui/sonner";
-// import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
+import Navbar from "@/components/nav/Navbar";
+import NavSidebar from "@/components/nav/NavSidebar";
 
 const HomePage = () => {
   const [prompt, setPrompt] = useState<string>("");
 
   return (
     <div className="flex h-screen w-full flex-col bg-black text-white">
-      {/* <Toaster />
-      <button
-        onClick={() =>
-          toast("Launching Soon", {
-            description: "This feature is in the works.",
-            action: {
-              label: "Close",
-              onClick: () => {},
-            },
-          })
-        }
-      >
-        Show Toast
-      </button> */}
-      {/* navbar */}
-      <div className="fixed left-0 top-0 z-10 flex h-[76px] w-full flex-row justify-between bg-black px-8">
-        <div className="flex flex-row items-center gap-2">
-          <p className="text-2xl font-medium font-outfit">OrbitAI</p>
-        </div>
-        <div className="flex flex-row items-center gap-2">
-          <button className="p-3 text-zinc-500 transition-colors duration-200 hover:text-white">
-            <SearchIcon className="size-4" />
-          </button>
-
-          <Link
-            to="/login"
-            className="rounded-full bg-zinc-900 px-5 py-3 text-sm font-medium text-white outline-none hover:bg-zinc-800"
-          >
-            Log in
-          </Link>
-        </div>
-      </div>
-      <div className="h-[76px] w-screen bg-black" />
-
-      {/* sidebar */}
-      <div className="fixed flex h-screen w-[200px] flex-col justify-center bg-black px-4">
-        {NAVLINKS.map((link) => (
-          <Link
-            key={link.text}
-            to={link.href}
-            className="group flex flex-row items-center justify-between rounded-lg bg-transparent py-[9px] pl-4 pr-3 hover:bg-neutral-900"
-          >
-            <span className="text-sm font-light text-white">{link.text}</span>
-            <ChevronRightIcon
-              className="size-4 text-zinc-600 opacity-0 group-hover:opacity-100"
-              strokeWidth={2}
-            />
-          </Link>
-        ))}
-      </div>
+      <Toaster />
+      <Navbar />
+      <NavSidebar />
 
       {/* hero section */}
       <div className="flex w-full flex-1 flex-row">
         <div className="block h-[calc(100vh-76px)] w-[200px]" />
         {/* main content */}
         <div className="flex h-full w-full flex-1 flex-col bg-black">
-          <div className="w-full h-[calc(100vh-90px)] flex flex-col items-center justify-center">
+          <div className="w-full h-[calc(100vh-120px)] flex flex-col items-center justify-center">
             <h1 className="text-3xl font-medium mb-6">What can I help with?</h1>
             <VanishInput prompt={prompt} setPrompt={setPrompt} />
             <DefaultPrompts setPrompt={setPrompt} />

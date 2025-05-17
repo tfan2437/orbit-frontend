@@ -1,7 +1,6 @@
 import { SquarePenIcon, PanelRightIcon, SearchIcon } from "lucide-react";
 
 import { Sidebar, SidebarContent, useSidebar } from "@/components/ui/sidebar";
-import { signOut } from "@/services/firebase";
 import SparksIcon from "@/components/SparksIcon";
 import IconButton from "@/components/button/IconButton";
 import SidebarItem from "@/components/sidebar/SidebarItem";
@@ -13,6 +12,7 @@ import { generateId } from "@/utils/utils";
 import ChatsSection from "@/components/chat/ChatsSection";
 import UpgradeButton from "@/components/chat/UpgradeButton";
 import ChatsSkeleton from "@/components/chat/ChatsSkeleton";
+import SignOutButton from "@/components/chat/SignOutButton";
 
 const ChatSidebar = () => {
   const navigate = useNavigate();
@@ -93,14 +93,7 @@ const ChatSidebar = () => {
             </>
           )}
         </div>
-        <div className="px-2 pt-1">
-          <button
-            onClick={signOut}
-            className="flex gap-2 font-semibold w-full items-center hover:bg-neutral-800 px-2 py-2 rounded-lg select-none cursor-pointer"
-          >
-            Sign Out
-          </button>
-        </div>
+        <SignOutButton />
         <UpgradeButton />
       </SidebarContent>
     </Sidebar>
