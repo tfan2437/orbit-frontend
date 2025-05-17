@@ -1,20 +1,30 @@
 import { useNavigate } from "react-router-dom";
-import type { Chat } from "@/types";
-import SidebarItem from "@/components/sidebar/SidebarItem";
+import type { Chats } from "@/types";
+
+import ChatItem from "@/components/sidebar/ChatItem";
+import type { Dispatch, SetStateAction } from "react";
 
 interface ChatsSectionProps {
   title: string;
-  chats: Chat[];
+  displayType: string;
+  chats: Chats;
+  setChats: Dispatch<SetStateAction<Chats>>;
 }
 
-const ChatsSection = ({ title, chats }: ChatsSectionProps) => {
+const ChatsSection = ({
+  title,
+  displayType,
+  chats,
+  setChats,
+}: ChatsSectionProps) => {
   const navigate = useNavigate();
-
   const redirectToChat = (chat_id: string) => {
     navigate(`/c/${chat_id}`);
   };
 
-  if (chats.length === 0) return null;
+  const displayChats = chats[displayType as keyof Chats];
+
+  if (displayChats.length === 0) return null;
 
   return (
     <div className="w-full flex flex-col mt-4">
@@ -22,9 +32,10 @@ const ChatsSection = ({ title, chats }: ChatsSectionProps) => {
         {title}
       </span>
       <div className="flex flex-col w-full">
-        {chats.map((chat) => (
-          <SidebarItem
+        {displayChats.map((chat) => (
+          <ChatItem
             key={chat.chat_id}
+            chatId={chat.chat_id}
             title={chat.title}
             onClick={() => redirectToChat(chat.chat_id)}
           />

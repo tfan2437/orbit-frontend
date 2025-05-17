@@ -4,17 +4,16 @@ import type { User } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
 
-import { ROUTES } from "@/constants";
-
 import LoginHeader from "@/components/layout/LoginHeader";
 import LoginBody from "@/components/layout/LoginBody";
 import LoginFooter from "@/components/layout/LoginFooter";
+import { generateId } from "@/utils/utils";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
-      if (user) navigate(ROUTES.DASHBOARD);
+      if (user) navigate(`/c/${generateId()}`);
     });
 
     return () => unsubscribe();

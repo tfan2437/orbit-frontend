@@ -141,7 +141,7 @@ export const storeChat = async (
       const { success: updateSuccess } = await updateChat(
         chat_id,
         uid,
-        title,
+        "",
         contents
       );
       return { success: updateSuccess, message: "Chat updated" };

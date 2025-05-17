@@ -90,9 +90,24 @@ const ChatSidebar = () => {
             <ChatsSkeleton />
           ) : (
             <>
-              <ChatsSection title="Today" chats={chats.today} />
-              <ChatsSection title="Yesterday" chats={chats.yesterday} />
-              <ChatsSection title="Previous" chats={chats.previous} />
+              <ChatsSection
+                title="Today"
+                displayType="today"
+                chats={chats}
+                setChats={setChats}
+              />
+              <ChatsSection
+                title="Yesterday"
+                displayType="yesterday"
+                chats={chats}
+                setChats={setChats}
+              />
+              <ChatsSection
+                title="Previous"
+                displayType="previous"
+                chats={chats}
+                setChats={setChats}
+              />
             </>
           )}
         </div>

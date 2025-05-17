@@ -12,7 +12,7 @@ import {
   getChatHistory,
 } from "@/utils/messageUtils";
 import { getUploadedUrls } from "@/utils/fileUtils";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { storeChat } from "@/utils/messageUtils";
 import MessagesContainer from "@/components/message/MessagesContainer";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -20,7 +20,7 @@ import { setLoading } from "@/store/slices/chatSlice";
 
 const ChatPage = () => {
   const { id = "" } = useParams();
-  const { pathname } = useLocation();
+  const pathname = window.location.pathname;
 
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
