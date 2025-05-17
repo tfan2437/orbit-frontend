@@ -8,8 +8,12 @@ import {
   CheckIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { generateId } from "@/utils/utils";
+import { useNavigate } from "react-router-dom";
 
 const ChatNavbar = () => {
+  const navigate = useNavigate();
+
   const { open } = useSidebar();
   const [isCopied, setIsCopied] = useState(false);
 
@@ -32,10 +36,9 @@ const ChatNavbar = () => {
             <Button
               variant="link"
               className="size-10 hover:bg-zinc-800 cursor-pointer p-0"
-              onClick={() => {}}
+              onClick={() => navigate(`/c/${generateId()}`)}
             >
               <SquarePenIcon className="size-[22px]" />
-              <span className="sr-only">Toggle Sidebar</span>
             </Button>
           </>
         )}
