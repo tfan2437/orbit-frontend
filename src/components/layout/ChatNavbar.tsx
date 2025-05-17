@@ -1,12 +1,7 @@
 import { SidebarTriggerCustom, useSidebar } from "@/components/ui/sidebar";
 import { useState } from "react";
 import UserAvatar from "@/components/UserAvatar";
-import {
-  SquarePenIcon,
-  ChevronDownIcon,
-  ForwardIcon,
-  CheckIcon,
-} from "lucide-react";
+import { SquarePenIcon, ForwardIcon, CheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { generateId } from "@/utils/utils";
 import { useNavigate } from "react-router-dom";

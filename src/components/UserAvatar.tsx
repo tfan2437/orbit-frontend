@@ -1,10 +1,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAppSelector } from "@/store/hooks";
 
 const UserAvatar = () => {
+  const user = useAppSelector((state) => state.user);
+
   return (
     <Avatar>
-      <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-      <AvatarFallback>CN</AvatarFallback>
+      <AvatarImage src={user.photo_url} alt="profile image" />
+      <AvatarFallback>{user.name.charAt(0) || "?"}</AvatarFallback>
     </Avatar>
   );
 };

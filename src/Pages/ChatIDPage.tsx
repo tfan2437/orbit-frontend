@@ -15,9 +15,11 @@ import { getUploadedUrls } from "@/utils/fileUtils";
 import { useParams } from "react-router-dom";
 import { storeChat } from "@/utils/messageUtils";
 import MessagesContainer from "@/components/message/MessagesContainer";
+import { useAppSelector } from "@/store/hooks";
 
 const ChatPage = () => {
   const { id = "" } = useParams();
+  const user = useAppSelector((state) => state.user);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInput = useRef<HTMLInputElement>(null);
@@ -58,8 +60,8 @@ const ChatPage = () => {
 
     const { message: storeMessage } = await storeChat(
       id,
-      "iAJIjDIllqe2pxPl4hHhXJNZEPg2",
-      "test-002",
+      user.uid,
+      text.slice(0, 20) || "New chat",
       [
         {
           role: "user",
@@ -113,8 +115,8 @@ const ChatPage = () => {
 
     const { message: storeMessage } = await storeChat(
       id,
-      "iAJIjDIllqe2pxPl4hHhXJNZEPg2",
-      "test-001",
+      user.uid,
+      text.slice(0, 20) || "New chat",
       [
         {
           role: "user",
@@ -212,7 +214,7 @@ const ChatPage = () => {
                 if (e.key === "Enter") {
                   if (prompt === "") return;
                   e.preventDefault();
-                  handleGenerateImage(prompt, files);
+                  handleGenerateText(prompt, files);
                 }
               }}
             />
@@ -226,7 +228,7 @@ const ChatPage = () => {
               </div>
               <button
                 className="rounded-full size-9 flex items-center justify-center cursor-pointer bg-white text-black hover:bg-zinc-200"
-                onClick={() => handleGenerateImage(prompt, files)}
+                onClick={() => handleGenerateText(prompt, files)}
                 disabled={prompt === ""}
               >
                 <ArrowUpIcon className="size-5" />

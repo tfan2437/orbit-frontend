@@ -1,4 +1,11 @@
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import SearchCommand from "@/components/SearchCommand";
 import { SearchIcon } from "lucide-react";
 import IconButton from "@/components/button/IconButton";
@@ -17,6 +24,12 @@ const SearchDialog = () => {
         />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[680px] p-0">
+        <DialogHeader className="hidden">
+          <DialogTitle>Search</DialogTitle>
+          <DialogDescription>
+            Search for a chat or create a new one.
+          </DialogDescription>
+        </DialogHeader>
         <SearchCommand setDialogOpen={setDialogOpen} />
       </DialogContent>
     </Dialog>

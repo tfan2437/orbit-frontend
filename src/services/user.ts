@@ -1,4 +1,3 @@
-import type { User } from "firebase/auth";
 import { axiosInstance } from "@/lib/axios";
 
 export interface UserData {
@@ -10,15 +9,25 @@ export interface UserData {
   last_login: string;
 }
 
-export const createUser = async (user: User): Promise<UserData | null> => {
+export const createUser = async ({
+  uid,
+  name,
+  email,
+  photo_url,
+}: {
+  uid: string;
+  name: string;
+  email: string;
+  photo_url: string;
+}): Promise<UserData | null> => {
   try {
     const response = await axiosInstance.post(
       "/users",
       {
-        uid: user.uid,
-        email: user.email,
-        name: user.displayName || user.email,
-        photo_url: user.photoURL,
+        uid,
+        email,
+        name,
+        photo_url,
         last_login: new Date(),
       },
       {

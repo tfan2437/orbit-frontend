@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 import { ROUTES } from "@/constants";
 import { handleAuthStateChanged } from "@/services/auth";
 import type { UserData } from "@/services/user";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { updateUser } from "@/store/slices/userSlice";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -12,6 +14,8 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({
   children,
 }: ProtectedRouteProps): React.ReactElement | null => {
+  const dispatch = useAppDispatch();
+
   const [loading, setLoading] = useState<boolean>(true);
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -38,14 +42,13 @@ const ProtectedRoute = ({
     return () => unsubscribe();
   }, [navigate]);
 
-  // useEffect(() => {
-  //   if (userData) {
-  //     console.log(userData);
-  //   }
-  // }, [userData]);
+  useEffect(() => {
+    if (userData && userData.uid !== "") {
+      dispatch(updateUser(userData));
+    }
+  }, [userData, dispatch]);
 
   if (loading) return <div>Loading...</div>;
-
   return authenticated ? <>{children}</> : null;
 };
 

@@ -14,9 +14,12 @@ import UpgradeButton from "@/components/chat/UpgradeButton";
 import ChatsSkeleton from "@/components/chat/ChatsSkeleton";
 import SignOutButton from "@/components/chat/SignOutButton";
 import SearchDialog from "@/components/SeachDialog";
+import { useAppSelector } from "@/store/hooks";
 
 const ChatSidebar = () => {
   const navigate = useNavigate();
+
+  const user = useAppSelector((state) => state.user);
 
   const { toggleSidebar } = useSidebar();
   const [fetching, setFetching] = useState(true);
@@ -28,12 +31,14 @@ const ChatSidebar = () => {
 
   useEffect(() => {
     const fetchChats = async () => {
-      const { chats } = await getUserChats("iAJIjDIllqe2pxPl4hHhXJNZEPg2");
-      setChats(chats);
+      if (user.uid !== "") {
+        const { chats } = await getUserChats(user.uid);
+        setChats(chats);
+      }
       setFetching(false);
     };
     fetchChats();
-  }, []);
+  }, [user.uid]);
 
   return (
     <Sidebar>

@@ -18,7 +18,14 @@ export const handleAuthStateChanged = (
         if (existingUser) {
           onAuthenticated(existingUser);
         } else {
-          const newUser = await createUser(user);
+          const newUser = await createUser({
+            uid: user.uid,
+            name: user.displayName || user.email || "",
+            email: user.email || "",
+            photo_url:
+              user.photoURL ||
+              "https://live.staticflickr.com/65535/53875123869_a98d6e8b99_m.jpg",
+          });
           if (newUser) {
             onAuthenticated(newUser);
           } else {
