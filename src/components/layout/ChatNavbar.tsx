@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { generateId } from "@/utils/utils";
 import { useNavigate } from "react-router-dom";
+import ModelPopover from "@/components/ModelPopover";
 
 const ChatNavbar = () => {
   const navigate = useNavigate();
@@ -42,14 +43,7 @@ const ChatNavbar = () => {
             </Button>
           </>
         )}
-        <button
-          className="h-10 hover:bg-zinc-800 rounded-lg px-3 cursor-pointer p-0 decoration-none flex items-center gap-2"
-          onClick={() => {}}
-        >
-          <span className="text-neutral-100 text-lg font-medium">Orbit</span>
-          <span className="text-neutral-300 text-lg font-light">3</span>
-          <ChevronDownIcon className="size-4 text-neutral-300 ml-1" />
-        </button>
+        <ModelPopover />
       </div>
       <div className="flex items-center gap-3">
         <button

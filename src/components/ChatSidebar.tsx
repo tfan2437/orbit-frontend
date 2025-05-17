@@ -1,4 +1,4 @@
-import { SquarePenIcon, PanelRightIcon, SearchIcon } from "lucide-react";
+import { SquarePenIcon, PanelRightIcon } from "lucide-react";
 
 import { Sidebar, SidebarContent, useSidebar } from "@/components/ui/sidebar";
 import SparksIcon from "@/components/SparksIcon";
@@ -13,6 +13,7 @@ import ChatsSection from "@/components/chat/ChatsSection";
 import UpgradeButton from "@/components/chat/UpgradeButton";
 import ChatsSkeleton from "@/components/chat/ChatsSkeleton";
 import SignOutButton from "@/components/chat/SignOutButton";
+import SearchDialog from "@/components/SeachDialog";
 
 const ChatSidebar = () => {
   const navigate = useNavigate();
@@ -46,11 +47,7 @@ const ChatSidebar = () => {
             className="hover:bg-neutral-700"
           />
           <div className="flex items-center">
-            <IconButton
-              icon={<SearchIcon className="size-[22px]" />}
-              onClick={() => {}}
-              className="hover:bg-neutral-700"
-            />
+            <SearchDialog />
             <IconButton
               icon={<SquarePenIcon className="size-[22px]" />}
               onClick={() => navigate(`/c/${generateId()}`)}
