@@ -13,7 +13,7 @@ const RoundButton = ({
     <button
       onClick={onClick}
       className={twMerge(
-        "rounded-full size-9 flex items-center justify-center border  cursor-pointer",
+        "rounded-full size-9 flex items-center justify-center border cursor-pointer",
         activated
           ? "border-transparent bg-blue-400/30 text-blue-400/90"
           : "border-zinc-600 bg-transparent text-zinc-200"

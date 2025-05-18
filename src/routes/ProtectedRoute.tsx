@@ -6,6 +6,7 @@ import { handleAuthStateChanged } from "@/services/auth";
 import type { UserData } from "@/services/user";
 import { useAppDispatch } from "@/store/hooks";
 import { updateUser } from "@/store/slices/userSlice";
+import { LoaderPinwheelIcon } from "lucide-react";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -48,7 +49,14 @@ const ProtectedRoute = ({
     }
   }, [userData, dispatch]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <LoaderPinwheelIcon className="size-8 animate-spin" strokeWidth={1.5} />
+      </div>
+    );
+  }
+
   return authenticated ? <>{children}</> : null;
 };
 

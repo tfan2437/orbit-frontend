@@ -7,7 +7,7 @@ interface ChatData {
 }
 
 const initialState: ChatData = {
-  model: 3,
+  model: 2,
   loading: false,
 };
 

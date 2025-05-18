@@ -17,6 +17,8 @@ import { storeChat } from "@/utils/messageUtils";
 import MessagesContainer from "@/components/message/MessagesContainer";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setLoading } from "@/store/slices/chatSlice";
+import PromptArea from "@/components/message/PromptArea";
+import { twMerge } from "tailwind-merge";
 
 const ChatPage = () => {
   const { id = "" } = useParams();
@@ -24,6 +26,7 @@ const ChatPage = () => {
 
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
+  const { model } = useAppSelector((state) => state.chat);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInput = useRef<HTMLInputElement>(null);
@@ -186,64 +189,29 @@ const ChatPage = () => {
           <div ref={messagesEndRef} className="w-full h-36 bg-transparent" />
         </div>
       </div>
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-3xl px-4">
-        <div className="w-full bg-black rounded-t-4xl flex-col items-center">
-          <div className="w-full flex-col items-center border-zinc-600 bg-zinc-900 rounded-3xl border p-3">
-            {files.length > 0 && (
-              <div className="w-full flex items-center gap-2 mb-3">
-                {files.map((file, index) => (
-                  <div
-                    key={index}
-                    className="aspect-square h-14 rounded-lg relative"
-                  >
-                    <button
-                      className="absolute -top-1.5 -right-1.5 border-3 p-0.5 rounded-full border-zinc-900 bg-white cursor-pointer outline-none"
-                      onClick={() => removeFile(file)}
-                    >
-                      <XIcon className="size-3 text-black" strokeWidth={2.5} />
-                    </button>
-                    <img
-                      src={`data:${file.type};base64,${file.base64}`}
-                      alt="image"
-                      className="h-full object-cover rounded-lg"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-            <textarea
-              className="scrollbar w-full resize-none overflow-y-auto border-none p-1 text-base outline-none"
-              placeholder="Ask anything"
-              rows={2}
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  if (prompt === "") return;
-                  e.preventDefault();
-                  handleGenerateText(prompt, files);
-                }
-              }}
-            />
-            <div className="flex h-fit w-full flex-row items-center justify-between gap-2">
-              <div className="flex flex-row items-center gap-2">
-                <RoundButton
-                  onClick={selectFiles}
-                  children={<PlusIcon className="size-6" />}
-                />
-                <RoundButton children={<GlobeIcon className="size-4" />} />
-              </div>
-              <button
-                className="rounded-full size-9 flex items-center justify-center cursor-pointer bg-white text-black hover:bg-zinc-200"
-                onClick={() => handleGenerateText(prompt, files)}
-                disabled={prompt === ""}
-              >
-                <ArrowUpIcon className="size-5" />
-              </button>
-            </div>
+      <div
+        className={twMerge(
+          "absolute left-1/2 -translate-x-1/2 w-full max-w-3xl px-4",
+          history.length === 0 && messages.length === 0
+            ? "-translate-y-1/2 top-1/2"
+            : "bottom-0"
+        )}
+      >
+        {history.length === 0 && messages.length === 0 && (
+          <div className="w-full flex justify-center">
+            <h1 className="text-3xl font-medium mb-8">What can I help with?</h1>
           </div>
-          <div className="w-full h-4" />
-        </div>
+        )}
+        <PromptArea
+          files={files}
+          prompt={prompt}
+          setPrompt={setPrompt}
+          model={model}
+          handleGenerateImage={handleGenerateImage}
+          handleGenerateText={handleGenerateText}
+          selectFiles={selectFiles}
+          removeFile={removeFile}
+        />
       </div>
       <input
         ref={fileInput}

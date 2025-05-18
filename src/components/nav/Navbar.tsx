@@ -1,7 +1,11 @@
+import { useAppSelector } from "@/store/hooks";
+import { generateId } from "@/utils/utils";
 import { SearchIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
+  const { uid } = useAppSelector((state) => state.user);
+
   return (
     <>
       <div className="fixed left-0 top-0 z-10 flex h-[76px] w-full flex-row justify-between bg-black px-8">
@@ -16,12 +20,21 @@ const Navbar = () => {
             <SearchIcon className="size-4" />
           </Link>
 
-          <Link
-            to="/login"
-            className="rounded-full bg-neutral-900 px-5 py-3 text-sm font-medium text-white outline-none hover:bg-neutral-800"
-          >
-            Log in
-          </Link>
+          {uid ? (
+            <Link
+              to={`/c/${generateId()}`}
+              className="rounded-full bg-neutral-900 px-5 py-3 text-sm font-medium text-white outline-none hover:bg-neutral-800"
+            >
+              Chat
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="rounded-full bg-neutral-900 px-5 py-3 text-sm font-medium text-white outline-none hover:bg-neutral-800"
+            >
+              Log in
+            </Link>
+          )}
         </div>
       </div>
       <div className="w-full">
