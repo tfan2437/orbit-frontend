@@ -18,7 +18,11 @@ const VanishInput = ({ prompt, setPrompt }: VanishInputProps) => {
     "Summarize the Matrix trilogy as a haiku.",
   ];
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (
+    e:
+      | React.FormEvent<HTMLFormElement>
+      | React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
     e.preventDefault();
     console.log("submitted");
     const id = generateId();

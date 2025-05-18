@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
-import type { Content, InlineData } from "@/types";
+import type { Content as LocalContent, InlineData } from "@/types";
+import type { Content } from "@google/genai";
 const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
 import { getErrorMessage } from "@/utils/utils";
@@ -18,7 +19,7 @@ type ImageResponse = {
 };
 
 export const generateTextResponse = async (
-  messages: Content[] = []
+  messages: LocalContent[] = []
 ): Promise<TextResponse> => {
   const textConfig = { responseMimeType: "text/plain" };
   const textModel = "gemini-2.0-flash";
@@ -27,7 +28,7 @@ export const generateTextResponse = async (
     const response = await ai.models.generateContentStream({
       model: textModel,
       config: textConfig,
-      contents: messages,
+      contents: convertLocalContentToGenAI(messages),
     });
 
     let textResponse = "";
@@ -63,7 +64,7 @@ export const generateTextResponse = async (
 };
 
 export const generateImageResponse = async (
-  messages: Content[] = []
+  messages: LocalContent[] = []
 ): Promise<ImageResponse> => {
   const imageConfig = {
     responseModalities: ["image", "text"],
@@ -75,7 +76,7 @@ export const generateImageResponse = async (
     const response = await ai.models.generateContentStream({
       model: imageModel,
       config: imageConfig,
-      contents: messages,
+      contents: convertLocalContentToGenAI(messages),
     });
 
     const responseData: InlineData[] = [];
@@ -128,3 +129,21 @@ export const generateImageResponse = async (
     };
   }
 };
+
+// Helper function to convert local Content type to Google Genai Content type
+function convertLocalContentToGenAI(messages: LocalContent[]): Content[] {
+  return messages.map((message) => ({
+    role: message.role,
+    parts: message.parts.map((part) => {
+      if ("text" in part) {
+        return { text: part.text };
+      }
+      if ("inlineData" in part) {
+        return { inlineData: part.inlineData };
+      }
+      // fileUrl parts are not directly supported in Google Genai's Content type
+      // You may need to handle this case differently based on your requirements
+      return { text: "" }; // Fallback for unsupported part types
+    }),
+  }));
+}
