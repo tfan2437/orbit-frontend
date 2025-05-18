@@ -1,18 +1,15 @@
 import { SidebarTriggerCustom, useSidebar } from "@/components/ui/sidebar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserAvatar from "@/components/UserAvatar";
 import { SquarePenIcon, ForwardIcon, CheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { generateId } from "@/utils/utils";
 import { useNavigate } from "react-router-dom";
 import ModelPopover from "@/components/ModelPopover";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 const ChatNavbar = () => {
   const navigate = useNavigate();
-
-  const dispatch = useAppDispatch();
-  const { model } = useAppSelector((state) => state.chat);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const { open } = useSidebar();
   const [isCopied, setIsCopied] = useState(false);
@@ -27,8 +24,47 @@ const ChatNavbar = () => {
     }, 2000);
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <div className="bg-transparent top-0 left-0 w-full h-14 absolute flex items-center justify-between z-50 pl-3 pr-5">
+    <>
+      {windowWidth < 768 ? (
+        <MobileNavbar />
+      ) : (
+        <DesktopNavbar
+          open={open}
+          handleShare={handleShare}
+          isCopied={isCopied}
+          navigate={navigate}
+        />
+      )}
+    </>
+  );
+};
+
+export default ChatNavbar;
+
+interface DesktopNavbarProps {
+  open: boolean;
+  handleShare: () => void;
+  isCopied: boolean;
+  navigate: (path: string) => void;
+}
+
+const DesktopNavbar = ({
+  open,
+  handleShare,
+  isCopied,
+  navigate,
+}: DesktopNavbarProps) => {
+  return (
+    <div className="bg-black top-0 left-0 w-full h-14 absolute flex items-center justify-between xl:bg-transparent z-50 pl-3 pr-5">
       <div className="flex items-center">
         {!open && (
           <>
@@ -42,7 +78,7 @@ const ChatNavbar = () => {
             </Button>
           </>
         )}
-        <ModelPopover />
+        <ModelPopover align="start" />
       </div>
       <div className="flex items-center gap-3">
         <button
@@ -67,4 +103,17 @@ const ChatNavbar = () => {
     </div>
   );
 };
-export default ChatNavbar;
+
+const MobileNavbar = () => {
+  return (
+    <div className="bg-black top-0 left-0 w-full h-14 absolute flex items-center justify-between z-50 pl-3 pr-5">
+      <div className="flex items-center">
+        <SidebarTriggerCustom />
+      </div>
+      <ModelPopover align="center" />
+      <div className="flex items-center justify-center size-10">
+        <UserAvatar />
+      </div>
+    </div>
+  );
+};

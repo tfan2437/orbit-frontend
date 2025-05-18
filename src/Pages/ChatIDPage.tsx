@@ -1,7 +1,5 @@
 import type { Content } from "@/types";
 import { useEffect, useState, useRef } from "react";
-import { ArrowUpIcon, GlobeIcon, PlusIcon, XIcon } from "lucide-react";
-import RoundButton from "@/components/button/RoundButton";
 import type { FileModel } from "@/utils/fileUtils";
 import { formatFiles } from "@/utils/fileUtils";
 import {
@@ -23,6 +21,8 @@ import { twMerge } from "tailwind-merge";
 const ChatPage = () => {
   const { id = "" } = useParams();
   const pathname = window.location.pathname;
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
@@ -176,6 +176,14 @@ const ChatPage = () => {
     setMessages([]);
   }, [pathname]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="w-full h-screen flex flex-col items-center gap-2 relative bg-black">
       <div className="scrollbar w-full flex-1 h-full overflow-y-auto flex flex-col items-center">
@@ -189,15 +197,20 @@ const ChatPage = () => {
           <div ref={messagesEndRef} className="w-full h-36 bg-transparent" />
         </div>
       </div>
+      {history.length === 0 && messages.length === 0 && windowWidth < 640 && (
+        <div className="w-full flex justify-center absolute left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2">
+          <h1 className="text-3xl font-medium mb-8">What can I help with?</h1>
+        </div>
+      )}
       <div
         className={twMerge(
-          "absolute left-1/2 -translate-x-1/2 w-full max-w-3xl px-4",
-          history.length === 0 && messages.length === 0
+          "absolute left-1/2 -translate-x-1/2 w-full max-w-3xl px-4 sm:px-6 md:px-4",
+          history.length === 0 && messages.length === 0 && windowWidth > 640
             ? "-translate-y-1/2 top-1/2"
             : "bottom-0"
         )}
       >
-        {history.length === 0 && messages.length === 0 && (
+        {history.length === 0 && messages.length === 0 && windowWidth > 640 && (
           <div className="w-full flex justify-center">
             <h1 className="text-3xl font-medium mb-8">What can I help with?</h1>
           </div>

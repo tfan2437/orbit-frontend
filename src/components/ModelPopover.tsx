@@ -9,7 +9,11 @@ import { twMerge } from "tailwind-merge";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setModel } from "@/store/slices/chatSlice";
 
-const ModelPopover = () => {
+interface ModelPopoverProps {
+  align: "start" | "center";
+}
+
+const ModelPopover = ({ align }: ModelPopoverProps) => {
   const [open, setOpen] = useState(false);
 
   const dispatch = useAppDispatch();
@@ -32,7 +36,7 @@ const ModelPopover = () => {
           <ChevronDownIcon className="size-4 text-neutral-300 ml-1" />
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 py-2 px-2" align="start" sideOffset={6}>
+      <PopoverContent className="w-80 py-2 px-2" align={align} sideOffset={6}>
         <span className="text-neutral-500 text-sm px-2">Models</span>
         <div className="flex flex-col mt-2 pb-1 select-none">
           <div
