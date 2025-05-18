@@ -1,11 +1,13 @@
-import Footer from "@/components/footer/Footer";
-import VanishInput from "@/components/home/VanishInput";
 import { useState } from "react";
-import DefaultPrompts from "@/components/home/defaultPrompts";
 import { Toaster } from "@/components/ui/sonner";
+
+// components
 import Navbar from "@/components/nav/Navbar";
 import NavSidebar from "@/components/nav/NavSidebar";
+import VanishInput from "@/components/home/VanishInput";
+import DefaultPrompts from "@/components/home/defaultPrompts";
 import DiscoverSection from "@/components/home/DiscoverSection";
+import Footer from "@/components/footer/Footer";
 
 const HomePage = () => {
   const [prompt, setPrompt] = useState<string>("");

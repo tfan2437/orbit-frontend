@@ -4,7 +4,7 @@ import ChatLayout from "@/layout/ChatLayout";
 import ProtectedRoute from "@/layout/ProtectedRoute";
 import HomePage from "@/Pages/HomePage";
 import LoginPage from "@/Pages/LoginPage";
-import ChatIDPage from "@/Pages/ChatIDPage";
+import ChatPage from "@/Pages/ChatPage";
 
 const App = () => {
   return (
@@ -17,7 +17,7 @@ const App = () => {
             path={ROUTES.CHAT_ID}
             element={
               <ProtectedRoute>
-                <ChatIDPage />
+                <ChatPage />
               </ProtectedRoute>
             }
           />
