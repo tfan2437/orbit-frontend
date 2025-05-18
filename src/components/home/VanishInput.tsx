@@ -1,9 +1,8 @@
-"use client";
-
 import type { Dispatch, SetStateAction } from "react";
-import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import { useNavigate } from "react-router-dom";
 import { generateId } from "@/utils/utils";
+import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
+
 interface VanishInputProps {
   prompt: string;
   setPrompt: Dispatch<SetStateAction<string>>;
@@ -12,11 +11,11 @@ interface VanishInputProps {
 const VanishInput = ({ prompt, setPrompt }: VanishInputProps) => {
   const navigate = useNavigate();
   const placeholders = [
-    "What's the first rule of Fight Club?",
-    "Who is Tyler Durden?",
-    "Where is Andrew Laeddis Hiding?",
-    "Write a Javascript method to reverse a string",
-    "How to assemble your own PC?",
+    "Explain recursion... without using recursion.",
+    "What if Batman had Orbit AI as a sidekick?",
+    "Write a Python script that tells jokes.",
+    "Pitch a startup idea involving time travel.",
+    "Summarize the Matrix trilogy as a haiku.",
   ];
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {

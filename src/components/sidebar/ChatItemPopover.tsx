@@ -1,18 +1,15 @@
-import { EllipsisIcon } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setLoading } from "@/store/slices/chatSlice";
+import { generateId } from "@/utils/utils";
+import { deleteChat } from "@/services/chat";
+import { PencilIcon, Trash2Icon, EllipsisIcon } from "lucide-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
-
-import { PencilIcon, Trash2Icon } from "lucide-react";
-import { deleteChat, renameChat } from "@/services/chat";
-import { useDispatch } from "react-redux";
-import { setLoading } from "@/store/slices/chatSlice";
-import { useNavigate } from "react-router-dom";
-import { generateId } from "@/utils/utils";
-import { useAppSelector } from "@/store/hooks";
 
 const SidebarItemPopover = ({
   chatId,
@@ -24,7 +21,6 @@ const SidebarItemPopover = ({
   const pathname = window.location.pathname;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { uid } = useAppSelector((state) => state.user);
 
   const [open, setOpen] = useState(false);
 

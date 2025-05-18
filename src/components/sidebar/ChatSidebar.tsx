@@ -1,20 +1,22 @@
-import { SquarePenIcon, PanelRightIcon } from "lucide-react";
-
-import { Sidebar, SidebarContent, useSidebar } from "@/components/ui/sidebar";
-import SparksIcon from "@/components/SparksIcon";
-import IconButton from "@/components/button/IconButton";
-import SidebarItem from "@/components/sidebar/SidebarItem";
-import { useEffect, useState } from "react";
-import { getUserChats } from "@/utils/messageUtils";
 import type { Chats } from "@/types";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getUserChats } from "@/utils/messageUtils";
 import { generateId } from "@/utils/utils";
-import ChatsSection from "@/components/chat/ChatsSection";
-import UpgradeButton from "@/components/chat/UpgradeButton";
-import ChatsSkeleton from "@/components/chat/ChatsSkeleton";
-import SignOutButton from "@/components/chat/SignOutButton";
-import SearchDialog from "@/components/SeachDialog";
 import { useAppSelector } from "@/store/hooks";
+// icons
+import SparksIcon from "@/components/SparksIcon";
+import { SquarePenIcon, PanelRightIcon } from "lucide-react";
+// ui
+import { Sidebar, SidebarContent, useSidebar } from "@/components/ui/sidebar";
+// components
+import SidebarItem from "@/components/sidebar/SidebarItem";
+import SearchDialog from "@/components/SeachDialog";
+import ChatsSection from "@/components/chat/ChatsSection";
+import ChatsSkeleton from "@/components/chat/ChatsSkeleton";
+import IconButton from "@/components/button/IconButton";
+import UpgradeButton from "@/components/chat/UpgradeButton";
+import SignOutButton from "@/components/chat/SignOutButton";
 
 const ChatSidebar = () => {
   const navigate = useNavigate();
@@ -90,23 +92,16 @@ const ChatSidebar = () => {
             <ChatsSkeleton />
           ) : (
             <>
-              <ChatsSection
-                title="Today"
-                displayType="today"
-                chats={chats}
-                setChats={setChats}
-              />
+              <ChatsSection title="Today" displayType="today" chats={chats} />
               <ChatsSection
                 title="Yesterday"
                 displayType="yesterday"
                 chats={chats}
-                setChats={setChats}
               />
               <ChatsSection
                 title="Previous"
                 displayType="previous"
                 chats={chats}
-                setChats={setChats}
               />
             </>
           )}

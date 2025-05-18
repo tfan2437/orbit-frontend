@@ -1,3 +1,9 @@
+import type { FileModel } from "@/utils/fileUtils";
+import type { Dispatch, SetStateAction } from "react";
+import { useState } from "react";
+import { twMerge } from "tailwind-merge";
+import { useAppDispatch } from "@/store/hooks";
+import { setModel } from "@/store/slices/chatSlice";
 import {
   ArrowUpIcon,
   GlobeIcon,
@@ -6,12 +12,6 @@ import {
   ImagePlusIcon,
 } from "lucide-react";
 import RoundButton from "@/components/button/RoundButton";
-import type { FileModel } from "@/utils/fileUtils";
-import type { Dispatch, SetStateAction } from "react";
-import { useAppDispatch } from "@/store/hooks";
-import { setModel } from "@/store/slices/chatSlice";
-import { twMerge } from "tailwind-merge";
-import { useState } from "react";
 
 interface PromptAreaProps {
   files: FileModel[];

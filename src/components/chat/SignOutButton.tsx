@@ -1,5 +1,5 @@
-import { signOut } from "@/services/firebase";
 import { LogOutIcon } from "lucide-react";
+import { signOut } from "@/services/firebase";
 
 const SignOutButton = () => {
   return (

@@ -1,5 +1,4 @@
 import type { Content } from "@/types";
-
 import UserMessage from "@/components/message/UserMessage";
 import ModelMessage from "@/components/message/ModelMessage";
 import ResponseAnimation from "@/components/message/ResponseAnimation";

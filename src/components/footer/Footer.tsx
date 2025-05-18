@@ -1,4 +1,3 @@
-import FooterSection from "@/components/footer/FooterSection";
 import {
   FOOTER_RESEARCH,
   FOOTER_ADVANCEMENT,
@@ -8,6 +7,7 @@ import {
   FOOTER_COMPANY,
   FOOTER_POLICY,
 } from "@/constants/link";
+import FooterSection from "@/components/footer/FooterSection";
 
 const Footer = () => {
   return (

@@ -1,9 +1,9 @@
-import ChatItemPopover from "@/components/sidebar/ChatItemPopover";
-import { renameChat } from "@/services/chat";
 import { useEffect, useRef, useState } from "react";
-import { setLoading } from "@/store/slices/chatSlice";
+import { renameChat } from "@/services/chat";
 import { useAppSelector } from "@/store/hooks";
 import { useDispatch } from "react-redux";
+import { setLoading } from "@/store/slices/chatSlice";
+import ChatItemPopover from "@/components/sidebar/ChatItemPopover";
 
 interface ChatItemProps {
   chatId: string;

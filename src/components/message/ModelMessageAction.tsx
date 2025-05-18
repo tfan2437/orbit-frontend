@@ -1,11 +1,11 @@
+import { useState } from "react";
+import { twMerge } from "tailwind-merge";
 import {
   CopyIcon,
   CheckIcon,
   ThumbsUpIcon,
   ThumbsDownIcon,
 } from "lucide-react";
-import { useState } from "react";
-import { twMerge } from "tailwind-merge";
 
 interface ModelMessageActionProps {
   textResponse: string;

@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import ChatSidebar from "@/components/ChatSidebar";
+import ChatSidebar from "@/components/sidebar/ChatSidebar";
 import ChatNavbar from "@/components/layout/ChatNavbar";
 import { Toaster } from "@/components/ui/sonner";
 

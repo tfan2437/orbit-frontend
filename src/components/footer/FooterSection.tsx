@@ -1,5 +1,5 @@
-import FooterLink from "@/components/footer/FooterLink";
 import type { LinksGroup } from "@/constants/link";
+import FooterLink from "@/components/footer/FooterLink";
 
 const FooterSection = ({ group }: { group: LinksGroup }) => {
   return (

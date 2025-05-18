@@ -1,9 +1,9 @@
-import { auth } from "@/services/firebase";
-import { generateId } from "@/utils/utils";
-import { onAuthStateChanged } from "firebase/auth";
-import { SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/services/firebase";
+import { generateId } from "@/utils/utils";
+import { SearchIcon } from "lucide-react";
 
 const Navbar = () => {
   const [uid, setUid] = useState<string>("");

@@ -1,22 +1,14 @@
-import { useNavigate } from "react-router-dom";
 import type { Chats } from "@/types";
-
+import { useNavigate } from "react-router-dom";
 import ChatItem from "@/components/sidebar/ChatItem";
-import type { Dispatch, SetStateAction } from "react";
 
 interface ChatsSectionProps {
   title: string;
   displayType: string;
   chats: Chats;
-  setChats: Dispatch<SetStateAction<Chats>>;
 }
 
-const ChatsSection = ({
-  title,
-  displayType,
-  chats,
-  setChats,
-}: ChatsSectionProps) => {
+const ChatsSection = ({ title, displayType, chats }: ChatsSectionProps) => {
   const navigate = useNavigate();
   const redirectToChat = (chat_id: string) => {
     navigate(`/c/${chat_id}`);

@@ -1,5 +1,5 @@
-import { ChevronRightIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ChevronRightIcon } from "lucide-react";
 
 interface NavLinkProps {
   text: string;

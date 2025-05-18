@@ -1,10 +1,10 @@
-import { SidebarTriggerCustom, useSidebar } from "@/components/ui/sidebar";
 import { useEffect, useState } from "react";
-import UserAvatar from "@/components/UserAvatar";
+import { useNavigate } from "react-router-dom";
+import { generateId } from "@/utils/utils";
 import { SquarePenIcon, ForwardIcon, CheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { generateId } from "@/utils/utils";
-import { useNavigate } from "react-router-dom";
+import { SidebarTriggerCustom, useSidebar } from "@/components/ui/sidebar";
+import UserAvatar from "@/components/nav/UserAvatar";
 import ModelPopover from "@/components/ModelPopover";
 
 const ChatNavbar = () => {

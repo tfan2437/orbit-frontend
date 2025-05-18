@@ -1,5 +1,4 @@
 import type { FileUrlPart } from "@/types";
-import { DownloadIcon } from "lucide-react";
 
 interface ModelImageUrlProps {
   part: FileUrlPart;
