@@ -2,7 +2,7 @@ import axios from "axios";
 import { auth } from "@/services/firebase";
 
 export const axiosInstance = axios.create({
-  baseURL: "http://localhost:5500/api",
+  baseURL: import.meta.env.VITE_API_ENDPOINT,
 });
 
 // Add a request interceptor to automatically add the auth token

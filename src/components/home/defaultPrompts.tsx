@@ -1,10 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
-import {
-  PRESET_PROMPTS_LESS,
-  PRESET_PROMPTS_MORE,
-  PRESET_PROMPTS_MOBILE,
-} from "@/constants";
+import { PRESET_PROMPTS_LESS, PRESET_PROMPTS_MORE } from "@/constants";
 
 import OutlineButton from "@/components/button/OutlineButton";
 

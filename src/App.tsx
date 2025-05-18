@@ -5,9 +5,9 @@ import MainLayout from "@/layout/MainLayout";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import HomePage from "@/Pages/HomePage";
 import LoginPage from "@/Pages/LoginPage";
-import DashboardPage from "@/Pages/DashboardPage";
 import ChatPage from "@/Pages/ChatPage";
 import ChatIDPage from "@/Pages/ChatIDPage";
+import Protected from "./routes/Protected";
 
 const App = () => {
   return (
@@ -15,22 +15,21 @@ const App = () => {
       <Routes>
         <Route path={ROUTES.HOME} element={<HomePage />} />
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-        <Route path={ROUTES.CHAT} element={<ChatPage />} />
+        {/* <Route
+          path={"/chat"}
+          element={
+            <Protected>
+              <ChatPage />
+            </Protected>
+          }
+        /> */}
         <Route element={<MainLayout />}>
-          <Route
-            path={ROUTES.CHAT}
-            element={
-              <ProtectedRoute>
-                <ChatPage />
-              </ProtectedRoute>
-            }
-          />
           <Route
             path={ROUTES.CHAT_ID}
             element={
-              <ProtectedRoute>
+              <Protected>
                 <ChatIDPage />
-              </ProtectedRoute>
+              </Protected>
             }
           />
         </Route>

@@ -60,22 +60,3 @@ export const PRESET_PROMPTS_MORE: PresetPrompt[] = [
     prompt: "Tell me the latest news ",
   },
 ];
-
-export const PRESET_PROMPTS_MOBILE: PresetPrompt[] = [
-  {
-    tool: "Image",
-    prompt: "Create an image of ",
-  },
-  {
-    tool: "Stock",
-    prompt: "Give me the stock price for ",
-  },
-  {
-    tool: "Sports",
-    prompt: "Give me the latest games played by ",
-  },
-  {
-    tool: "Draft",
-    prompt: "Help me write a ",
-  },
-];

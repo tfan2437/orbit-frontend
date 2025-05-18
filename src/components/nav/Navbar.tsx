@@ -1,10 +1,23 @@
-import { useAppSelector } from "@/store/hooks";
+import { auth } from "@/services/firebase";
 import { generateId } from "@/utils/utils";
+import { onAuthStateChanged } from "firebase/auth";
 import { SearchIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const { uid } = useAppSelector((state) => state.user);
+  const [uid, setUid] = useState<string>("");
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUid(user.uid);
+      } else {
+        setUid("");
+      }
+    });
+    return () => unsubscribe();
+  }, [uid]);
 
   return (
     <>

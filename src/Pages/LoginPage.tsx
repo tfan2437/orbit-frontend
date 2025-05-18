@@ -14,7 +14,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
-      if (user) navigate("/chat");
+      if (user) navigate(`/c/${generateId()}`);
     });
     return () => unsubscribe();
   }, [navigate]);
