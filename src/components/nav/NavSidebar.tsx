@@ -3,7 +3,7 @@ import NavLink from "@/components/nav/NavLink";
 
 const NavSidebar = () => {
   return (
-    <div className="fixed flex h-screen w-[200px] flex-col justify-center bg-black px-4">
+    <div className="hidden fixed md:flex h-screen w-[200px] flex-col justify-center bg-black px-4">
       {NAVLINKS.map((link) => (
         <NavLink key={link.text} text={link.text} href={link.href} />
       ))}

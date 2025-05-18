@@ -17,15 +17,15 @@ const HomePage = () => {
 
       {/* hero section */}
       <div className="flex w-full flex-1 flex-row">
-        <div className="block h-[calc(100vh-76px)] w-[200px]" />
+        <div className="hidden h-[calc(100vh-76px)] w-[200px] md:block" />
         {/* main content */}
         <div className="flex h-full w-full flex-1 flex-col bg-black">
-          <div className="w-full h-[calc(100vh-120px)] flex flex-col items-center justify-center">
+          <div className="w-full h-[calc(100vh-360px)] sm:h-[calc(100vh-120px)] flex flex-col items-center justify-center px-6">
             <h1 className="text-3xl font-medium mb-6">What can I help with?</h1>
             <VanishInput prompt={prompt} setPrompt={setPrompt} />
             <DefaultPrompts setPrompt={setPrompt} />
           </div>
-          <div className="w-full max-w-[1376px] mx-auto">
+          <div className="w-full max-w-[1376px] mx-auto px-6">
             <p className="text-5xl text-neutral-900">
               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas
               beatae voluptatem quae animi dicta vel obcaecati natus, est
@@ -54,12 +54,17 @@ const HomePage = () => {
             </p>
           </div>
 
-          <div className="flex mx-auto my-10 rounded flex-col items-center justify-center bg-neutral-800 w-full max-w-[1376px] h-[367px] gap-8">
-            <h1 className="text-5xl font-medium">Get started with OrbitAI</h1>
-            <button className="rounded-full bg-neutral-700 px-5 py-[10px] text-sm font-medium text-white outline-none hover:bg-neutral-600 cursor-pointer">
-              Log in
-            </button>
+          <div className="w-full my-10 max-w-[1376px] mx-auto px-6">
+            <div className="flex rounded-lg flex-col items-center justify-center bg-neutral-800 py-16 md:py-32 w-full gap-8">
+              <h1 className="text-5xl font-medium px-4">
+                Get started with OrbitAI
+              </h1>
+              <button className="rounded-full bg-neutral-700 px-5 py-[10px] text-sm font-medium text-white outline-none hover:bg-neutral-600 cursor-pointer">
+                Log in
+              </button>
+            </div>
           </div>
+
           <Footer />
         </div>
       </div>

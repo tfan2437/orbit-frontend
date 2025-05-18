@@ -1,6 +1,10 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
-import { PRESET_PROMPTS_LESS, PRESET_PROMPTS_MORE } from "@/constants";
+import {
+  PRESET_PROMPTS_LESS,
+  PRESET_PROMPTS_MORE,
+  PRESET_PROMPTS_MOBILE,
+} from "@/constants";
 
 import OutlineButton from "@/components/button/OutlineButton";
 
@@ -13,7 +17,7 @@ const DefaultPrompts = ({ setPrompt }: DefaultPromptsProps) => {
 
   return (
     <div className="flex flex-col mt-4 items-center justify-between h-[84px]">
-      <div className="flex flex-row gap-2">
+      <div className="hidden sm:flex flex-row gap-2">
         {PRESET_PROMPTS_LESS.map((prompt) => (
           <OutlineButton
             key={prompt.tool}
@@ -26,7 +30,7 @@ const DefaultPrompts = ({ setPrompt }: DefaultPromptsProps) => {
         )}
       </div>
       {showMore && (
-        <div className="flex flex-row gap-2">
+        <div className="flex-row gap-2 hidden sm:flex">
           {PRESET_PROMPTS_MORE.map((prompt) => (
             <OutlineButton
               key={prompt.tool}

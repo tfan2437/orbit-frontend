@@ -8,7 +8,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="fixed left-0 top-0 z-10 flex h-[76px] w-full flex-row justify-between bg-black px-8">
+      <div className="fixed left-0 top-0 z-10 flex h-[76px] w-full flex-row justify-between bg-black px-6 md:px-8">
         <Link to="/" className="flex flex-row items-center gap-2">
           <p className="text-2xl font-medium font-outfit">OrbitAI</p>
         </Link>
