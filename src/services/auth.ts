@@ -1,8 +1,8 @@
-import { auth } from "@/services/firebase";
-import { onAuthStateChanged } from "firebase/auth";
-import { getUser, createUser } from "@/services/user";
 import type { User } from "firebase/auth";
 import type { UserData } from "@/services/user";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/services/firebase";
+import { getUser, createUser } from "@/services/user";
 
 export const handleAuthStateChanged = (
   onAuthenticated: (userData: UserData) => void,

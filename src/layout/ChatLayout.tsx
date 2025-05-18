@@ -1,15 +1,14 @@
 import { Outlet } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 import ChatSidebar from "@/components/sidebar/ChatSidebar";
 import ChatNavbar from "@/components/layout/ChatNavbar";
-import { Toaster } from "@/components/ui/sonner";
 
-const MainLayout = () => {
+const ChatLayout = () => {
   return (
     <SidebarProvider>
       <Toaster />
       <ChatSidebar />
-
       <main className="w-full flex flex-col items-center relative">
         <ChatNavbar />
         <Outlet />
@@ -18,4 +17,4 @@ const MainLayout = () => {
   );
 };
 
-export default MainLayout;
+export default ChatLayout;

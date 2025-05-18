@@ -1,13 +1,13 @@
+import { useState } from "react";
+import { twMerge } from "tailwind-merge";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setModel } from "@/store/slices/chatSlice";
 import { CheckIcon, ChevronDownIcon } from "lucide-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
-import { twMerge } from "tailwind-merge";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setModel } from "@/store/slices/chatSlice";
 
 interface ModelPopoverProps {
   align: "start" | "center";

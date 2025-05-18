@@ -1,3 +1,6 @@
+import type { Chats } from "@/types";
+import { useState } from "react";
+import { SearchIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -6,11 +9,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import SearchCommand from "@/components/SearchCommand";
-import { SearchIcon } from "lucide-react";
 import IconButton from "@/components/button/IconButton";
-import { useState } from "react";
-import type { Chats } from "@/types";
+import SearchCommand from "@/components/SearchCommand";
 
 interface SearchDialogProps {
   chats: Chats;

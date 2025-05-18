@@ -1,12 +1,12 @@
+import type { User } from "firebase/auth";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import type { User } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
 import { useAppDispatch } from "@/store/hooks";
 import { updateUser } from "@/store/slices/userSlice";
 
-const Protected = ({ children }: { children: React.ReactNode }) => {
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -32,4 +32,4 @@ const Protected = ({ children }: { children: React.ReactNode }) => {
 
   return <>{children}</>;
 };
-export default Protected;
+export default ProtectedRoute;

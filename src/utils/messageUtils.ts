@@ -1,8 +1,8 @@
 import type { Chats, Content, Part } from "@/types";
+import type { FileModel } from "@/utils/fileUtils";
 import { generateTextResponse, generateImageResponse } from "@/services/gemini";
-import type { FileModel } from "./fileUtils";
-import { generateName } from "./utils";
 import { getChat, updateChat, createChat, getChats } from "@/services/chat";
+import { generateName } from "@/utils/utils";
 
 const geminiErrorMessage: Content = {
   role: "model",

@@ -1,5 +1,7 @@
+import type { Chats } from "@/types";
+import { useNavigate } from "react-router-dom";
+import { generateId } from "@/utils/utils";
 import { SquarePenIcon } from "lucide-react";
-import CommandChatItem from "@/components/ui/command-chat-item";
 import {
   Command,
   CommandEmpty,
@@ -7,9 +9,7 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { useNavigate } from "react-router-dom";
-import { generateId } from "@/utils/utils";
-import type { Chats } from "@/types";
+import CommandChatItem from "@/components/ui/command-chat-item";
 
 const SearchCommand = ({
   setDialogOpen,

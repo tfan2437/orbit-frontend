@@ -1,5 +1,5 @@
-import { axiosInstance } from "@/lib/axios";
 import type { Chats, Content } from "@/types";
+import { axiosInstance } from "@/lib/axios";
 import { getErrorMessage } from "@/utils/utils";
 
 export const getChat = async (

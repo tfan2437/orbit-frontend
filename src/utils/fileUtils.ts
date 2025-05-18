@@ -1,5 +1,6 @@
 import { uploadToS3 } from "@/services/s3service";
-import { getErrorMessage } from "./utils";
+import { getErrorMessage } from "@/utils/utils";
+
 export interface FileModel {
   name: string;
   ext: string;

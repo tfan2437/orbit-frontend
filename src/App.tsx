@@ -1,13 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 import { ROUTES } from "@/constants";
-
-import MainLayout from "@/layout/MainLayout";
-import ProtectedRoute from "@/routes/ProtectedRoute";
+import ChatLayout from "@/layout/ChatLayout";
+import ProtectedRoute from "@/layout/ProtectedRoute";
 import HomePage from "@/Pages/HomePage";
 import LoginPage from "@/Pages/LoginPage";
-import ChatPage from "@/Pages/ChatPage";
 import ChatIDPage from "@/Pages/ChatIDPage";
-import Protected from "./routes/Protected";
 
 const App = () => {
   return (
@@ -15,21 +12,13 @@ const App = () => {
       <Routes>
         <Route path={ROUTES.HOME} element={<HomePage />} />
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-        {/* <Route
-          path={"/chat"}
-          element={
-            <Protected>
-              <ChatPage />
-            </Protected>
-          }
-        /> */}
-        <Route element={<MainLayout />}>
+        <Route element={<ChatLayout />}>
           <Route
             path={ROUTES.CHAT_ID}
             element={
-              <Protected>
+              <ProtectedRoute>
                 <ChatIDPage />
-              </Protected>
+              </ProtectedRoute>
             }
           />
         </Route>
