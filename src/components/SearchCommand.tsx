@@ -9,11 +9,14 @@ import {
 } from "@/components/ui/command";
 import { useNavigate } from "react-router-dom";
 import { generateId } from "@/utils/utils";
+import type { Chats } from "@/types";
 
 const SearchCommand = ({
   setDialogOpen,
+  chats,
 }: {
   setDialogOpen: (open: boolean) => void;
+  chats: Chats;
 }) => {
   const router = useNavigate();
 
@@ -33,18 +36,42 @@ const SearchCommand = ({
             <span>New Chat</span>
           </CommandItem>
         </CommandGroup>
-        <CommandGroup heading="Today">
-          <CommandChatItem text="Today's Chat" />
-          <CommandChatItem text="Today's Chat" />
-        </CommandGroup>
-        <CommandGroup heading="Yesterday">
-          <CommandChatItem text="Yesterday's Chat" />
-          <CommandChatItem text="Yesterday's Chat" />
-        </CommandGroup>
-        <CommandGroup heading="Previous">
-          <CommandChatItem text="Previous Chat" />
-          <CommandChatItem text="Previous Chat" />
-        </CommandGroup>
+        {chats.today.length > 0 && (
+          <CommandGroup heading="Today">
+            {chats.today.map((chat) => (
+              <div
+                key={chat.chat_id}
+                onClick={() => handleNavigate(`/c/${chat.chat_id}`)}
+              >
+                <CommandChatItem text={chat.title} />
+              </div>
+            ))}
+          </CommandGroup>
+        )}
+        {chats.yesterday.length > 0 && (
+          <CommandGroup heading="Yesterday">
+            {chats.yesterday.map((chat) => (
+              <div
+                key={chat.chat_id}
+                onClick={() => handleNavigate(`/c/${chat.chat_id}`)}
+              >
+                <CommandChatItem text={chat.title} />
+              </div>
+            ))}
+          </CommandGroup>
+        )}
+        {chats.previous.length > 0 && (
+          <CommandGroup heading="Previous">
+            {chats.previous.map((chat) => (
+              <div
+                key={chat.chat_id}
+                onClick={() => handleNavigate(`/c/${chat.chat_id}`)}
+              >
+                <CommandChatItem text={chat.title} />
+              </div>
+            ))}
+          </CommandGroup>
+        )}
       </div>
     </Command>
   );

@@ -53,7 +53,7 @@ const ChatSidebar = () => {
             className="hover:bg-neutral-700"
           />
           <div className="flex items-center">
-            <SearchDialog />
+            <SearchDialog chats={chats} />
             <IconButton
               icon={<SquarePenIcon className="size-[22px]" />}
               onClick={() => navigate(`/c/${generateId()}`)}

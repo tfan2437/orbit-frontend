@@ -10,8 +10,13 @@ import SearchCommand from "@/components/SearchCommand";
 import { SearchIcon } from "lucide-react";
 import IconButton from "@/components/button/IconButton";
 import { useState } from "react";
+import type { Chats } from "@/types";
 
-const SearchDialog = () => {
+interface SearchDialogProps {
+  chats: Chats;
+}
+
+const SearchDialog = ({ chats }: SearchDialogProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
@@ -30,7 +35,7 @@ const SearchDialog = () => {
             Search for a chat or create a new one.
           </DialogDescription>
         </DialogHeader>
-        <SearchCommand setDialogOpen={setDialogOpen} />
+        <SearchCommand setDialogOpen={setDialogOpen} chats={chats} />
       </DialogContent>
     </Dialog>
   );
