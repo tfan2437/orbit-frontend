@@ -11,11 +11,11 @@ import { generateId } from "@/utils/utils";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
-      if (user) navigate(`/c/${generateId()}`);
+      if (user) navigate("/chat");
     });
-
     return () => unsubscribe();
   }, [navigate]);
 
@@ -29,7 +29,7 @@ const LoginPage = () => {
       <div
         className="w-1/2 h-full md:block hidden"
         style={{
-          backgroundImage: "url(/space-3.jpg)",
+          backgroundImage: "url(/moon.jpg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

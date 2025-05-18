@@ -3,12 +3,12 @@ import { generateId } from "@/utils/utils";
 import { useNavigate } from "react-router-dom";
 
 const ChatPage = () => {
-  const navigate = useNavigate();
-  const id = generateId();
+  // const navigate = useNavigate();
+  // const id = generateId();
 
-  useEffect(() => {
-    navigate(`/c/${id}`);
-  }, [navigate, id]);
+  // useEffect(() => {
+  //   navigate(`/c/${id}`);
+  // }, [navigate, id]);
 
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center">

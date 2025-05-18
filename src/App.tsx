@@ -15,6 +15,7 @@ const App = () => {
       <Routes>
         <Route path={ROUTES.HOME} element={<HomePage />} />
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+        <Route path={ROUTES.CHAT} element={<ChatPage />} />
         <Route element={<MainLayout />}>
           <Route
             path={ROUTES.CHAT}
@@ -29,14 +30,6 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <ChatIDPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path={ROUTES.DASHBOARD}
-            element={
-              <ProtectedRoute>
-                <DashboardPage />
               </ProtectedRoute>
             }
           />
