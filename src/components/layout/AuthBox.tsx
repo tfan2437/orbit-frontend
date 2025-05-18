@@ -86,6 +86,7 @@ const AuthBox = () => {
               onFocus={() => setFocused("username")}
               onBlur={() => setFocused("")}
               className="w-full px-4 py-2 rounded-full border-1 border-neutral-300 text-black focus:outline-none focus:border-blue-500"
+              required
             />
           </div>
         )}
@@ -108,7 +109,9 @@ const AuthBox = () => {
             id="email"
             onFocus={() => setFocused("email")}
             onBlur={() => setFocused("")}
-            className="w-full px-4 py-2 rounded-full border-1 border-neutral-300 text-black focus:outline-none focus:border-blue-500"
+            className="w-full px-4 py-2 rounded-full border-1 border-neutral-300 text-black focus:outline-none focus:border-blue-500 placeholder:text-neutral-300 placeholder:font-light"
+            placeholder={mode === "signin" ? "test@gmail.com" : ""}
+            required
           />
         </div>
         <div className="w-full relative">
@@ -131,7 +134,9 @@ const AuthBox = () => {
               id="password"
               onFocus={() => setFocused("password")}
               onBlur={() => setFocused("")}
-              className="w-full px-4 py-2 rounded-full border-1 border-neutral-300 text-black focus:outline-none focus:border-blue-500"
+              className="w-full px-4 py-2 rounded-full border-1 border-neutral-300 text-black focus:outline-none focus:border-blue-500 placeholder:text-neutral-300 placeholder:font-light"
+              placeholder={mode === "signin" ? "testpassword" : ""}
+              required
             />
             {authInfo.password && (
               <button

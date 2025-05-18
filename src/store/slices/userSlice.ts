@@ -31,8 +31,16 @@ const userSlice = createSlice({
       state.subscription_tier = action.payload.subscription_tier;
       state.last_login = action.payload.last_login;
     },
+    cleanUpUser: (state) => {
+      state.uid = "";
+      state.name = "";
+      state.email = "";
+      state.photo_url = "";
+      state.subscription_tier = "";
+      state.last_login = "";
+    },
   },
 });
 
-export const { removeUser, updateUser } = userSlice.actions;
+export const { removeUser, updateUser, cleanUpUser } = userSlice.actions;
 export default userSlice.reducer;
