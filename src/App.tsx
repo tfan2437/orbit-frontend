@@ -2,10 +2,10 @@ import { Routes, Route } from "react-router-dom";
 import { ROUTES } from "@/constants";
 import ChatLayout from "@/layout/ChatLayout";
 import ProtectedRoute from "@/layout/ProtectedRoute";
-import NotFoundPage from "@/pages/NotFoundPage";
-import HomePage from "@/pages/HomePage";
-import LoginPage from "@/pages/LoginPage";
-import ChatPage from "@/pages/ChatPage";
+import NotFoundPage from "@/Pages/NotFoundPage";
+import HomePage from "@/Pages/HomePage";
+import LoginPage from "@/Pages/LoginPage";
+import ChatPage from "@/Pages/ChatPage";
 import MainLayout from "./layout/MainLayout";
 
 const App = () => {
