@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+// store
 import { useDispatch } from "react-redux";
 import { setLoading } from "@/store/slices/chatSlice";
+// utils
 import { generateId } from "@/utils/utils";
 import { deleteChat } from "@/services/chat";
+// icons
 import { PencilIcon, Trash2Icon, EllipsisIcon } from "lucide-react";
+// ui
 import {
   Popover,
   PopoverContent,

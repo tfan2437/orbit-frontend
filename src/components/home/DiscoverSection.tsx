@@ -14,7 +14,6 @@ const DiscoverSection = () => {
             date="Feb 14th 2025"
           />
         </div>
-
         <div className="flex flex-col w-full sm:w-1/3 gap-3">
           <div className="w-full flex flex-col">
             <img

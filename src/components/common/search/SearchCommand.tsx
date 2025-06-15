@@ -1,7 +1,7 @@
 import type { Chats } from "@/types";
 import { useNavigate } from "react-router-dom";
-import { generateId } from "@/utils/utils";
 import { SquarePenIcon } from "lucide-react";
+import { generateId } from "@/utils/utils";
 import {
   Command,
   CommandEmpty,

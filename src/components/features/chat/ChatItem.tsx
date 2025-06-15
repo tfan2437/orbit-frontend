@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+// services
 import { renameChat } from "@/services/chat";
-import { useAppSelector } from "@/store/hooks";
+// store
 import { useDispatch } from "react-redux";
+import { useAppSelector } from "@/store/hooks";
 import { setLoading } from "@/store/slices/chatSlice";
-import ChatItemPopover from "@/components/sidebar/ChatItemPopover";
+// components
+import ChatItemPopover from "@/components/features/chat/ChatItemPopover";
 
 interface ChatItemProps {
   chatId: string;

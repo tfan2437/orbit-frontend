@@ -1,14 +1,14 @@
 import { Outlet } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
-import ChatSidebar from "@/components/sidebar/ChatSidebar";
-import ChatNavbar from "@/components/layout/ChatNavbar";
+import Sidebar from "@/components/layout/Sidebar";
+import ChatNavbar from "@/components/layout/navigation/ChatNavbar";
 
 const ChatLayout = () => {
   return (
     <SidebarProvider>
       <Toaster />
-      <ChatSidebar />
+      <Sidebar />
       <main className="w-full flex flex-col items-center relative">
         <ChatNavbar />
         <Outlet />

@@ -8,7 +8,7 @@ interface VanishInputProps {
   setPrompt: Dispatch<SetStateAction<string>>;
 }
 
-const VanishInput = ({ prompt, setPrompt }: VanishInputProps) => {
+const AnimatedPromptArea = ({ prompt, setPrompt }: VanishInputProps) => {
   const navigate = useNavigate();
   const placeholders = [
     "Explain recursion... without using recursion.",
@@ -41,4 +41,4 @@ const VanishInput = ({ prompt, setPrompt }: VanishInputProps) => {
   );
 };
 
-export default VanishInput;
+export default AnimatedPromptArea;

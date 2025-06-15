@@ -1,5 +1,5 @@
+import NavLink from "@/components/layout/navigation/NavLink";
 import { NAVLINKS } from "@/constants/link";
-import NavLink from "@/components/nav/NavLink";
 
 const NavSidebar = () => {
   return (
@@ -10,4 +10,5 @@ const NavSidebar = () => {
     </div>
   );
 };
+
 export default NavSidebar;

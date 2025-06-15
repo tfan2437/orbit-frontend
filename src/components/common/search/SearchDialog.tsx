@@ -9,8 +9,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import IconButton from "@/components/button/IconButton";
-import SearchCommand from "@/components/SearchCommand";
+import IconButton from "@/components/common/buttons/IconButton";
+import SearchCommand from "@/components/common/search/SearchCommand";
 
 interface SearchDialogProps {
   chats: Chats;

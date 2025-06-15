@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 import { PRESET_PROMPTS_LESS, PRESET_PROMPTS_MORE } from "@/constants";
-import OutlineButton from "@/components/button/OutlineButton";
+import OutlineButton from "@/components/common/buttons/OutlineButton";
 
 interface DefaultPromptsProps {
   setPrompt: Dispatch<SetStateAction<string>>;

@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
+// store
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setModel } from "@/store/slices/chatSlice";
+// icons
 import { CheckIcon, ChevronDownIcon } from "lucide-react";
+// ui
 import {
   Popover,
   PopoverContent,
@@ -13,7 +16,7 @@ interface ModelPopoverProps {
   align: "start" | "center";
 }
 
-const ModelPopover = ({ align }: ModelPopoverProps) => {
+const ModelSelection = ({ align }: ModelPopoverProps) => {
   const [open, setOpen] = useState(false);
 
   const dispatch = useAppDispatch();
@@ -85,4 +88,4 @@ const ModelPopover = ({ align }: ModelPopoverProps) => {
   );
 };
 
-export default ModelPopover;
+export default ModelSelection;

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+// icons
+import { SearchIcon } from "lucide-react";
+// utils
+import { generateId } from "@/utils/utils";
+// services
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
-import { generateId } from "@/utils/utils";
-import { SearchIcon } from "lucide-react";
 
 const Navbar = () => {
   const [uid, setUid] = useState<string>("");
@@ -56,4 +59,5 @@ const Navbar = () => {
     </>
   );
 };
+
 export default Navbar;

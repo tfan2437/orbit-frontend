@@ -1,6 +1,6 @@
 import type { Chats } from "@/types";
 import { useNavigate } from "react-router-dom";
-import ChatItem from "@/components/sidebar/ChatItem";
+import ChatItem from "@/components/features/chat/ChatItem";
 
 interface ChatsSectionProps {
   title: string;

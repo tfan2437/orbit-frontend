@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+// utils
 import { generateId } from "@/utils/utils";
+// icons
 import { SquarePenIcon, ForwardIcon, CheckIcon } from "lucide-react";
+// ui
 import { Button } from "@/components/ui/button";
 import { SidebarTriggerCustom, useSidebar } from "@/components/ui/sidebar";
-import UserAvatar from "@/components/nav/UserAvatar";
-import ModelPopover from "@/components/ModelPopover";
+// components
+import UserAvatar from "@/components/common/user/UserAvatar";
+import ModelPopover from "@/components/features/chat/ModelSelection";
 
 const ChatNavbar = () => {
   const navigate = useNavigate();

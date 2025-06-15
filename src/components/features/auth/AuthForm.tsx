@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+// services
 import { signUp, login, loginWithGoogle } from "@/services/firebase";
 
 type InputType = "email" | "password" | "username" | "";
@@ -11,7 +12,7 @@ type AuthInfo = {
   username: string;
 };
 
-const AuthBox = () => {
+const AuthForm = () => {
   const [mode, setMode] = useState<Mode>("signin");
   const [focused, setFocused] = useState<InputType>("");
   const [showPassword, setShowPassword] = useState(false);
@@ -187,4 +188,5 @@ const AuthBox = () => {
     </>
   );
 };
-export default AuthBox;
+
+export default AuthForm;

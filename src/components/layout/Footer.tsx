@@ -1,3 +1,5 @@
+import type { LinksGroup } from "@/constants/link";
+import { Link } from "react-router-dom";
 import {
   FOOTER_RESEARCH,
   FOOTER_ADVANCEMENT,
@@ -7,7 +9,6 @@ import {
   FOOTER_COMPANY,
   FOOTER_POLICY,
 } from "@/constants/link";
-import FooterSection from "@/components/footer/FooterSection";
 
 const Footer = () => {
   return (
@@ -32,4 +33,27 @@ const Footer = () => {
     </footer>
   );
 };
+
 export default Footer;
+
+const FooterSection = ({ group }: { group: LinksGroup }) => {
+  return (
+    <div className="flex flex-col gap-5">
+      <p className="text-sm text-neutral-500">{group.title}</p>
+      {group.links.map((link) => (
+        <FooterLink key={link.text} text={link.text} href={link.href} />
+      ))}
+    </div>
+  );
+};
+
+const FooterLink = ({ text, href }: { text: string; href: string }) => {
+  return (
+    <Link
+      to={href}
+      className="text-sm text-white hover:text-neutral-400 transition-colors duration-200"
+    >
+      {text}
+    </Link>
+  );
+};

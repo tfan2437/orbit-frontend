@@ -1,24 +1,35 @@
-import type { Chats } from "@/types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  SquarePenIcon,
+  PanelRightIcon,
+  CircleFadingArrowUpIcon,
+  LogOutIcon,
+  EllipsisIcon,
+} from "lucide-react";
+// types
+import type { Chats } from "@/types";
+// store & services
+import { useAppSelector } from "@/store/hooks";
+import { signOut } from "@/services/firebase";
+// utils
+import { toastInProgress } from "@/utils/errorUtils";
 import { getUserChats } from "@/utils/messageUtils";
 import { generateId } from "@/utils/utils";
-import { useAppSelector } from "@/store/hooks";
-// icons
-import SparksIcon from "@/components/SparksIcon";
-import { SquarePenIcon, PanelRightIcon } from "lucide-react";
 // ui
-import { Sidebar, SidebarContent, useSidebar } from "@/components/ui/sidebar";
+import {
+  Sidebar as SidebarContainer,
+  SidebarContent,
+  useSidebar,
+} from "@/components/ui/sidebar";
+import IconButton from "@/components/common/buttons/IconButton";
+import SparksIcon from "@/components/common/icons/SparksIcon";
 // components
-import SidebarItem from "@/components/sidebar/SidebarItem";
-import SearchDialog from "@/components/SeachDialog";
-import ChatsSection from "@/components/chat/ChatsSection";
-import ChatsSkeleton from "@/components/chat/ChatsSkeleton";
-import IconButton from "@/components/button/IconButton";
-import UpgradeButton from "@/components/chat/UpgradeButton";
-import SignOutButton from "@/components/chat/SignOutButton";
+import SearchDialog from "@/components/common/search/SearchDialog";
+import ChatsSection from "@/components/features/chat/ChatsSection";
+import ChatsSkeleton from "@/components/features/chat/ChatsSkeleton";
 
-const ChatSidebar = () => {
+const Sidebar = () => {
   const navigate = useNavigate();
 
   const user = useAppSelector((state) => state.user);
@@ -44,7 +55,7 @@ const ChatSidebar = () => {
   }, [user.uid, loading]);
 
   return (
-    <Sidebar>
+    <SidebarContainer>
       <SidebarContent>
         <div className="flex items-center justify-between px-2 py-2">
           <IconButton
@@ -109,8 +120,77 @@ const ChatSidebar = () => {
         <SignOutButton />
         <UpgradeButton />
       </SidebarContent>
-    </Sidebar>
+    </SidebarContainer>
   );
 };
 
-export default ChatSidebar;
+export default Sidebar;
+
+const SidebarItem = ({
+  icon = null,
+  title,
+  onClick,
+  hideMenu = false,
+}: {
+  icon?: React.ReactNode;
+  title: string;
+  onClick: () => void;
+  hideMenu?: boolean;
+}) => {
+  return (
+    <div
+      className="flex items-center p-2 hover:bg-neutral-800 rounded-md cursor-pointer justify-between group/sidebaritem"
+      onClick={onClick}
+    >
+      <div className="flex items-center gap-2 truncate">
+        {icon}
+        <span className="text-white text-sm select-none">{title}</span>
+      </div>
+      {!hideMenu && (
+        <div
+          className="size-6 flex items-center justify-center bg-transparent group-hover/sidebaritem:opacity-100 opacity-0"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          <EllipsisIcon className="size-4 text-neutral-100" />
+        </div>
+      )}
+    </div>
+  );
+};
+
+const SignOutButton = () => {
+  return (
+    <div className="px-2">
+      <button
+        onClick={signOut}
+        className="flex gap-2 w-full items-center hover:bg-neutral-800 px-2 py-2 rounded-lg select-none cursor-pointer"
+      >
+        <div className="flex items-center justify-center size-6">
+          <LogOutIcon className="size-5" />
+        </div>
+        <span className="text-sm">Sign Out</span>
+      </button>
+    </div>
+  );
+};
+
+const UpgradeButton = () => {
+  return (
+    <div className="px-2 pb-2">
+      <div
+        className="flex gap-2 w-full items-center hover:bg-neutral-800 px-2 py-2 rounded-lg select-none cursor-pointer"
+        onClick={toastInProgress}
+      >
+        <CircleFadingArrowUpIcon className="size-6" strokeWidth={1.5} />
+        <div className="flex flex-col">
+          <span className="text-sm">Upgrade Plan</span>
+          <span className="text-xs text-neutral-400 font-light">
+            Unlock new features
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};

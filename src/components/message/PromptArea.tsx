@@ -11,7 +11,7 @@ import {
   XIcon,
   ImagePlusIcon,
 } from "lucide-react";
-import RoundButton from "@/components/button/RoundButton";
+import RoundButton from "@/components/common/buttons/RoundButton";
 
 interface PromptAreaProps {
   files: FileModel[];
@@ -92,7 +92,7 @@ const PromptArea = ({
           <div className="flex flex-row items-center gap-2">
             <RoundButton
               onClick={selectFiles}
-              children={<PlusIcon className="size-6" />}
+              children={<PlusIcon className="size-5" />}
             />
             <RoundButton
               activated={search}

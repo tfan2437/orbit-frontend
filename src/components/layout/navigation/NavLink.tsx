@@ -20,4 +20,5 @@ const NavLink = ({ text, href }: NavLinkProps) => {
     </Link>
   );
 };
+
 export default NavLink;
